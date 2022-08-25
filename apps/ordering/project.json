@@ -9,8 +9,7 @@
       "options": {
         "outputPath": "dist/apps/ordering",
         "main": "apps/ordering/src/main.ts",
-        "tsConfig": "apps/ordering/tsconfig.app.json",
-        "assets": ["apps/ordering/src/assets"]
+        "tsConfig": "apps/ordering/tsconfig.app.json"
       },
       "configurations": {
         "production": {
@@ -18,10 +17,7 @@
           "extractLicenses": true,
           "inspect": false,
           "fileReplacements": [
-            {
-              "replace": "apps/ordering/src/environments/environment.ts",
-              "with": "apps/ordering/src/environments/environment.prod.ts"
-            }
+
           ]
         }
       }
