@@ -15,7 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@my-workspace/common": ["libs/common/src/index.ts"]
+      "@ordering/common": ["libs/common/src/index.ts"],
+      "@ordering/common/domain": ["libs/common/domain/src/index.ts"],
+      "@ordering/common/infra": ["libs/common/infra/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -3,6 +3,8 @@
   "version": 2,
   "projects": {
     "common": "libs/common",
+    "common-domain": "libs/common/domain",
+    "common-infra": "libs/common/infra",
     "ordering": "apps/ordering"
   }
 }
