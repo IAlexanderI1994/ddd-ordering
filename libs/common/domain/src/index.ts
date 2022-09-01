@@ -6,6 +6,7 @@ export * from './lib/value-objects/restaurant-id.value-object';
 export * from './lib/value-objects/money.value-object';
 export * from './lib/value-objects/base-id.value-object';
 export * from './lib/value-objects/order-item-id.value-object';
+export * from './lib/value-objects/tracking-id.value-object';
 export * from './lib/value-objects/order-id.value-object';
 export * from './lib/value-objects/order-status.value-object';
 export * from './lib/value-objects/street-address.value-object';

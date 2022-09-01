@@ -23,15 +23,15 @@ export class OrderItem extends BaseEntity<OrderItemId> {
     return this._subtotal;
   }
 
-  private readonly _orderId: OrderId;
+  private _orderId: OrderId;
 
-  private readonly _product: Product;
+  private _product: Product;
 
-  private readonly _quantity: number;
+  private _quantity: number;
 
-  private readonly _price: Money;
+  private _price: Money;
 
-  private readonly _subtotal: Money;
+  private _subtotal: Money;
 
   private constructor(builder: typeof OrderItem.Builder.prototype) {
     super();
@@ -41,6 +41,11 @@ export class OrderItem extends BaseEntity<OrderItemId> {
     this._price = builder.price
     this._subtotal = builder.subtotal
 
+  }
+
+  public initialize(orderId: OrderId, orderItemId: OrderItemId): void {
+    this._orderId = orderId
+    super.setId(orderItemId)
   }
 
   static builder(): typeof OrderItem.Builder.prototype {
@@ -104,6 +109,13 @@ export class OrderItem extends BaseEntity<OrderItemId> {
       return new OrderItem(this)
     }
 
+  }
+
+  public isPriceValid(): boolean {
+
+    return this.price.isGreaterThanZero() &&
+      this.price.equals(this.product.price) &&
+      this.price.multiply(this.quantity).equals(this.subtotal)
   }
 
 }

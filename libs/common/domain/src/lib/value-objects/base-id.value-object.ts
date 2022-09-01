@@ -3,7 +3,7 @@ export abstract class BaseId<T> {
   protected constructor(private readonly value: T) {
   }
 
-  get getValue() {
+  getValue() {
     return this.value
   }
 }

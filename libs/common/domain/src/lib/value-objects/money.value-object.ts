@@ -5,6 +5,7 @@ export class Money {
   ) {
   }
 
+  static ZERO = new Money(0)
   get amount() {
     return this._amount
   }
