@@ -2,7 +2,8 @@ import {
   AggregateRoot,
   CustomerId,
   Money,
-  OrderId, OrderItemId,
+  OrderId,
+  OrderItemId,
   OrderStatus,
   RestaurantId,
   StreetAddress,
@@ -21,7 +22,7 @@ export class Order extends AggregateRoot<OrderId> {
   private readonly _items: OrderItem[];
   private _trackingId: TrackingId
   private _orderStatus: OrderStatus
-  private _failureMessages: string[]
+  private _failureMessages: string[] = [];
 
   private constructor(builder: typeof Order.Builder.prototype) {
     super();
@@ -53,8 +54,39 @@ export class Order extends AggregateRoot<OrderId> {
     }
   }
 
-  public validateOrder(): void {
+  public pay(): void {
+    if (this.orderStatus !== OrderStatus.PENDING) {
+      throw new OrderDomainException('Order is not in correct state for pay operation')
+    }
+    this._orderStatus = OrderStatus.PAID
+  }
 
+  public approve(): void {
+    if (this.orderStatus !== OrderStatus.PAID) {
+      throw new OrderDomainException('Order is not in correct state for approve operation')
+    }
+    this._orderStatus = OrderStatus.APPROVED
+  }
+
+  public initCancel(failureMessages: string[]): void {
+    if (this.orderStatus !== OrderStatus.PAID) {
+      throw new OrderDomainException('Order is not in correct state for initCancel operation')
+    }
+    this._orderStatus = OrderStatus.CANCELLING
+    this.updateFailureMessages(failureMessages)
+  }
+
+  private cancel(failureMessages: string[]): void {
+    if (this.orderStatus !== OrderStatus.CANCELLING) {
+      throw new OrderDomainException('Order is not in correct state for cancel operation')
+    }
+    this._orderStatus = OrderStatus.CANCELLED
+    this.updateFailureMessages(failureMessages)
+
+  }
+
+
+  public validateOrder(): void {
     this.validateInitialOrder()
     this.validateTotalPrice()
     this.validateItemsPrice()
@@ -199,14 +231,14 @@ export class Order extends AggregateRoot<OrderId> {
 
 
   private validateInitialOrder() {
-    if (this.orderStatus !== null || this.getId() !==null) {
+    if (this.orderStatus !== null || this.getId() !== null) {
       throw new OrderDomainException("Order is not in correct state")
     }
   }
 
 
   private validateTotalPrice() {
-    if ( this.price === null || !this.price.isGreaterThanZero()) {
+    if (this.price === null || !this.price.isGreaterThanZero()) {
       throw new OrderDomainException("Total price must be greater than zero")
     }
   }
@@ -216,7 +248,7 @@ export class Order extends AggregateRoot<OrderId> {
       this.validateItemPrice(orderItem)
       return orderItem.subtotal
     })
-      .reduce((result,money) => result.add(money), Money.ZERO)
+      .reduce((result, money) => result.add(money), Money.ZERO)
 
     if (!this.price.equals(orderItemsTotal)) {
       throw new OrderDomainException(`Total price: ${this.price.amount} is not equal to orderItems total: ${orderItemsTotal.amount}`)
@@ -224,10 +256,16 @@ export class Order extends AggregateRoot<OrderId> {
   }
 
   private validateItemPrice(orderItem: OrderItem) {
-
-    if ( !orderItem.isPriceValid()) {
+    if (!orderItem.isPriceValid()) {
       throw new OrderDomainException(`Order item price: ${orderItem.price.amount} is not valid for product: ${orderItem.product.getId().getValue()}`)
     }
+  }
 
+  private updateFailureMessages(failureMessages: string[]) {
+    if (Array.isArray(this.failureMessages) && Array.isArray(failureMessages)) {
+      this._failureMessages = this.failureMessages.concat(
+        failureMessages.filter(m => m && m.length > 0)
+      )
+    }
   }
 }
