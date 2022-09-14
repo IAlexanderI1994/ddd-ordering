@@ -1,5 +1,6 @@
 export * from './lib/entity/aggregate-root';
 export * from './lib/entity/base.entity';
+export * from './lib/event/domain-event.interface';
 export * from './lib/value-objects/customer-id.value-object';
 export * from './lib/value-objects/product-id.value-object';
 export * from './lib/value-objects/restaurant-id.value-object';

@@ -1,3 +1,3 @@
-interface DomainEvent<T> {
-  
+export interface DomainEvent<T> {
+
 }
