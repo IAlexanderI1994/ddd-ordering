@@ -13,8 +13,8 @@ export class Product extends BaseEntity<ProductId> {
     return this._price;
   }
 
-  private readonly _name: string;
-  private readonly _price: Money;
+  private  _name: string;
+  private  _price: Money;
 
   constructor(productId: ProductId, name: string, price: Money) {
     super();
@@ -24,4 +24,9 @@ export class Product extends BaseEntity<ProductId> {
   }
 
 
+  updateWithConfirmedNameAndPrice(name: string, price: Money) {
+    this._name = name;
+    this._price = price
+
+  }
 }

@@ -76,7 +76,7 @@ export class Order extends AggregateRoot<OrderId> {
     this.updateFailureMessages(failureMessages)
   }
 
-  private cancel(failureMessages: string[]): void {
+  public cancel(failureMessages: string[]): void {
     if (this.orderStatus !== OrderStatus.CANCELLING) {
       throw new OrderDomainException('Order is not in correct state for cancel operation')
     }
