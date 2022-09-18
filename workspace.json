@@ -5,6 +5,7 @@
     "common": "libs/common",
     "common-domain": "libs/common/domain",
     "common-infra": "libs/common/infra",
+    "common-types": "libs/common/types",
     "ordering": "apps/ordering"
   }
 }
