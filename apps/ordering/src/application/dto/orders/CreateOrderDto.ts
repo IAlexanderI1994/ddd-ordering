@@ -2,7 +2,7 @@ import {IsNotEmpty, IsNumber, IsUUID, Min, ValidateNested} from "class-validator
 import {OrderItemDto} from "./OrderItemDto";
 import {OrderAddressDto} from "./OrderAddress";
 
-export class CreateOrder {
+export class CreateOrderDto {
 
   @IsUUID()
   @IsNotEmpty()

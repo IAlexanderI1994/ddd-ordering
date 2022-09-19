@@ -1,7 +1,7 @@
-import {DomainEvent} from "@ordering/common/domain";
+import {IDomainEvent} from "@ordering/common/domain";
 import {Order} from "../entity/order";
 
-export abstract class OrderEvent implements DomainEvent<Order>{
+export abstract class OrderEvent implements IDomainEvent<Order>{
   get order(): Order {
     return this._order;
   }
