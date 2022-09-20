@@ -9,6 +9,4 @@ export class RestaurantRepository implements IRestaurantRepository {
     findRestaurantInformation(restaurant: Restaurant): Restaurant {
         throw new Error("Method not implemented.");
     }
-
-
 }
