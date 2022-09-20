@@ -5,7 +5,7 @@ export class OrderAddressDto {
   @IsNotEmpty()
   @IsString()
   @Max(50)
-  address: string
+  street: string
 
   @IsNotEmpty()
   @IsString()

@@ -5,7 +5,7 @@ import {TrackOrderResponseDto} from "../../../dto/track/TrackOrderResponse";
 
 export interface IOrderApplicationService {
 
-  createOrder(orderDTO: CreateOrderDto): CreateOrderResponseDto;
+  createOrder(orderDTO: CreateOrderDto): Promise<CreateOrderResponseDto>;
 
-  trackOrder(trackDTO: TrackOrderDto): TrackOrderResponseDto;
+  trackOrder(trackDTO: TrackOrderDto): Promise<TrackOrderResponseDto>;
 }

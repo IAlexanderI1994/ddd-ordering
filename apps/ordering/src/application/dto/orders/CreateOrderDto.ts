@@ -6,24 +6,24 @@ export class CreateOrderDto {
 
   @IsUUID()
   @IsNotEmpty()
-  private readonly customerId: string;
+  readonly customerId: string;
 
   @IsUUID()
   @IsNotEmpty()
-  private readonly restaurantId: string;
+  readonly restaurantId: string;
 
   @IsNotEmpty()
   @IsNumber()
   @Min(1)
-  private readonly price: number;
+  readonly price: number;
 
   @IsNotEmpty()
   @ValidateNested({each: true})
-  private readonly orderItems: OrderItemDto[]
+  readonly orderItems: OrderItemDto[]
 
   @IsNotEmpty()
   @ValidateNested()
-  private readonly address: OrderAddressDto
+  readonly address: OrderAddressDto
 
 
 }

@@ -16,7 +16,7 @@ export class Product extends BaseEntity<ProductId> {
   private  _name: string;
   private  _price: Money;
 
-  constructor(productId: ProductId, name: string, price: Money) {
+  constructor(productId: ProductId, name?: string, price?: Money) {
     super();
     super.setId(productId)
     this._name = name;
@@ -27,6 +27,5 @@ export class Product extends BaseEntity<ProductId> {
   updateWithConfirmedNameAndPrice(name: string, price: Money) {
     this._name = name;
     this._price = price
-
   }
 }

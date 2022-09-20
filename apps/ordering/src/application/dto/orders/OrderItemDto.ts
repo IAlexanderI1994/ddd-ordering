@@ -4,22 +4,22 @@ export class OrderItemDto {
 
   @IsUUID()
   @IsNotEmpty()
-  private readonly productId: string;
+  readonly productId: string;
 
   @IsNumber()
   @Min(1)
   @IsNotEmpty()
-  private readonly quantity: number;
+  readonly quantity: number;
 
   @IsNumber()
   @Min(1)
   @IsNotEmpty()
-  private readonly price: number;
+  readonly price: number;
 
   @IsNumber()
   @Min(1)
   @IsNotEmpty()
-  private readonly subtotal: number;
+  readonly subtotal: number;
 
 
 
