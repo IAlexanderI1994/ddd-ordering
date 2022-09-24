@@ -6,6 +6,7 @@ import {randomUUID} from "crypto";
 import {OrderItemDto} from "../dto/orders/OrderItemDto";
 import {CreateOrderResponseDto} from "../dto/orders/CreateOrderResponse";
 import {plainToClass} from "class-transformer";
+import {TrackOrderResponseDto} from "../dto/track/TrackOrderResponse";
 
 export class OrderDataMapper {
 
@@ -43,6 +44,15 @@ export class OrderDataMapper {
       .build()
   }
 
+  static orderToTrackOrderResponse(order: Order): TrackOrderResponseDto {
+    return plainToClass(TrackOrderResponseDto, {
+      failureMessages: order.failureMessages,
+      orderStatus: order.orderStatus,
+      orderTrackingId: order.trackingId
+    })
+
+  }
+
   private static orderAddressToStreetAddress(address: OrderAddressDto) {
     return new StreetAddress(
       randomUUID(),
@@ -63,4 +73,5 @@ export class OrderDataMapper {
         .build()
     )
   }
+
 }

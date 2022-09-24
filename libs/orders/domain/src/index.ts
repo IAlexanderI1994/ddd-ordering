@@ -7,6 +7,7 @@ export * from './lib/entity/order-item';
 export * from './lib/entity/order';
 export * from './lib/entity/product';
 export * from './lib/entity/restaurant';
-export * from './lib/exception/order-domain.exception';
+export * from './lib/exception/OrderNotFoundException';
+export * from './lib/exception/OrderDomainException';
 export * from './lib/use-cases/order-domain.service.interface';
 export * from './lib/use-cases/order-domain.service';

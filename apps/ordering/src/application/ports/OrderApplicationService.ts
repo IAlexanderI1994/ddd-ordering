@@ -5,7 +5,7 @@ import { TrackOrderResponseDto } from "../dto/track/TrackOrderResponse";
 import {IOrderApplicationService} from "./input/services/IOrderApplicationService";
 import {Injectable} from "@nestjs/common";
 import {CreateOrderCommandHandler} from "./CreateOrderCommandHandler";
-import {OrderTrackCommandHandler} from "./OrderTrackCommandHandler";
+import {OrderTrackQueryHandler} from "./OrderTrackQueryHandler";
 
 
 @Injectable()
@@ -13,7 +13,7 @@ export class OrderApplicationService implements IOrderApplicationService {
 
   constructor(
     private readonly createOrderCommandHandler: CreateOrderCommandHandler,
-    private readonly orderTrackCommandHandler: OrderTrackCommandHandler,
+    private readonly orderTrackCommandHandler: OrderTrackQueryHandler,
 
     ) {
   }
