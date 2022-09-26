@@ -9,6 +9,7 @@
     "common-types": "libs/common/types",
     "infra-kafka": "libs/infra/kafka",
     "ordering": "apps/ordering",
-    "orders-domain": "libs/orders/domain"
+    "orders-domain": "libs/orders/domain",
+    "test-utils": "libs/test-utils"
   }
 }

@@ -23,7 +23,8 @@
       "@ordering/common/infra": ["libs/common/infra/src/index.ts"],
       "@ordering/common/types": ["libs/common/types/src/index.ts"],
       "@ordering/infra/kafka": ["libs/infra/kafka/src/index.ts"],
-      "@ordering/orders/domain": ["libs/orders/domain/src/index.ts"]
+      "@ordering/orders/domain": ["libs/orders/domain/src/index.ts"],
+      "@ordering/test-utils": ["libs/test-utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
