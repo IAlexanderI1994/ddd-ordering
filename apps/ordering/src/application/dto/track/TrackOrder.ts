@@ -1,6 +1,6 @@
 import {IsNotEmpty, IsUUID} from "class-validator";
 
-export class TrackOrderDto {
+export class TrackOrderQuery {
   @IsUUID()
   @IsNotEmpty()
   readonly orderTrackingId: string;

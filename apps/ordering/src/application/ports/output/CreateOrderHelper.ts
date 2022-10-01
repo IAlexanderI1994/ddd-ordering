@@ -8,7 +8,7 @@ import {
 } from "@ordering/orders/domain";
 import {OrderDataMapper} from "../../mappers/OrderDataMapper";
 import {Optional} from "@ordering/common/types";
-import {CreateOrderDto} from "../../dto/orders/CreateOrderDto";
+import {CreateOrderCommand} from "../../dto/orders/CreateOrderCommand";
 import {OrderRepository} from "./repository/OrderRepository";
 import {CustomerRepository} from "./repository/CustomerRepository";
 import {RestaurantRepository} from "./repository/RestaurantRepository";
@@ -28,7 +28,7 @@ export class CreateOrderHelper {
   }
 
   //todo: make transactional
-  public async persistOrder(command: CreateOrderDto): Promise<OrderCreatedEvent> {
+  public async persistOrder(command: CreateOrderCommand): Promise<OrderCreatedEvent> {
     await this.checkCustomer(command.customerId)
     const restaurant: Restaurant = await this.checkRestaurant(command)
     const order: Order = OrderDataMapper.createOrderCommandToOrder(command)
@@ -48,7 +48,7 @@ export class CreateOrderHelper {
     }
   }
 
-  private async checkRestaurant(command: CreateOrderDto): Promise<Restaurant> {
+  private async checkRestaurant(command: CreateOrderCommand): Promise<Restaurant> {
 
     const restaurant: Restaurant = OrderDataMapper.createOrderCommandToRestaurant(command)
 

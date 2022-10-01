@@ -1,27 +1,26 @@
-import { CreateOrderDto } from "../dto/orders/CreateOrderDto";
-import { CreateOrderResponseDto } from "../dto/orders/CreateOrderResponse";
-import { TrackOrderDto } from "../dto/track/TrackOrder";
-import { TrackOrderResponseDto } from "../dto/track/TrackOrderResponse";
+import {CreateOrderCommand} from "../dto/orders/CreateOrderCommand";
+import {CreateOrderResponseDto} from "../dto/orders/CreateOrderResponse";
+import {TrackOrderQuery} from "../dto/track/TrackOrder";
+import {TrackOrderResponseDto} from "../dto/track/TrackOrderResponse";
 import {IOrderApplicationService} from "./input/services/IOrderApplicationService";
 import {Injectable} from "@nestjs/common";
-import {CreateOrderCommandHandler} from "./CreateOrderCommandHandler";
-import {OrderTrackQueryHandler} from "./OrderTrackQueryHandler";
-
+import {CommandBus, QueryBus} from "@nestjs/cqrs";
 
 @Injectable()
 export class OrderApplicationService implements IOrderApplicationService {
 
   constructor(
-    private readonly createOrderCommandHandler: CreateOrderCommandHandler,
-    private readonly orderTrackCommandHandler: OrderTrackQueryHandler,
-
-    ) {
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
+  ) {
   }
-    async createOrder(orderDTO: CreateOrderDto): Promise<CreateOrderResponseDto> {
-       return await this.createOrderCommandHandler.execute(orderDTO)
-    }
-    async trackOrder(trackDTO: TrackOrderDto): Promise<TrackOrderResponseDto> {
-      return await this.orderTrackCommandHandler.execute(trackDTO)
-    }
+
+  async createOrder(createOrderCommand: CreateOrderCommand): Promise<CreateOrderResponseDto> {
+    return await this.commandBus.execute(createOrderCommand)
+  }
+
+  async trackOrder(trackOrderQuery: TrackOrderQuery): Promise<TrackOrderResponseDto> {
+    return await this.queryBus.execute(trackOrderQuery)
+  }
 
 }

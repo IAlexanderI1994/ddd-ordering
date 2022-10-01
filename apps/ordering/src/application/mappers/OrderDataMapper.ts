@@ -1,5 +1,5 @@
 import {Order, OrderItem, Product, Restaurant} from "@ordering/orders/domain";
-import {CreateOrderDto} from "../dto/orders/CreateOrderDto";
+import {CreateOrderCommand} from "../dto/orders/CreateOrderCommand";
 import {CustomerId, Money, ProductId, RestaurantId, StreetAddress} from "@ordering/common/domain";
 import {OrderAddressDto} from "../dto/orders/OrderAddress";
 import {randomUUID} from "crypto";
@@ -10,7 +10,7 @@ import {TrackOrderResponseDto} from "../dto/track/TrackOrderResponse";
 
 export class OrderDataMapper {
 
-  static createOrderCommandToRestaurant(createOrderDto: CreateOrderDto): Restaurant {
+  static createOrderCommandToRestaurant(createOrderDto: CreateOrderCommand): Restaurant {
 
     return Restaurant.builder()
       .setRestaurantId(new RestaurantId(createOrderDto.restaurantId))
@@ -32,7 +32,7 @@ export class OrderDataMapper {
 
   }
 
-  static createOrderCommandToOrder(createOrderDto: CreateOrderDto): Order {
+  static createOrderCommandToOrder(createOrderDto: CreateOrderCommand): Order {
 
     return Order
       .builder()

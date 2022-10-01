@@ -1,5 +1,5 @@
 import { IQueryHandler, QueryHandler} from "@nestjs/cqrs";
-import {TrackOrderDto} from "../dto/track/TrackOrder";
+import {TrackOrderQuery} from "../dto/track/TrackOrder";
 import {TrackOrderResponseDto} from "../dto/track/TrackOrderResponse";
 import {OrderRepository} from "./output/repository/OrderRepository";
 import {TrackingId} from "@ordering/common/domain";
@@ -8,8 +8,8 @@ import {Logger} from "@nestjs/common";
 import {OrderDataMapper} from "../mappers/OrderDataMapper";
 
 
-@QueryHandler(TrackOrderDto)
-export class OrderTrackQueryHandler implements IQueryHandler<TrackOrderDto>{
+@QueryHandler(TrackOrderQuery)
+export class OrderTrackQueryHandler implements IQueryHandler<TrackOrderQuery>{
 
 
   private readonly logger = new Logger(OrderTrackQueryHandler.name)
@@ -18,7 +18,7 @@ export class OrderTrackQueryHandler implements IQueryHandler<TrackOrderDto>{
   ) {}
 
 
-  public async execute(query: TrackOrderDto): Promise<TrackOrderResponseDto> {
+  public async execute(query: TrackOrderQuery): Promise<TrackOrderResponseDto> {
     const orderSearchResult: Order = await this.orderRepository.findByTrackingId(new TrackingId(query.orderTrackingId))
 
     if ( !orderSearchResult) {

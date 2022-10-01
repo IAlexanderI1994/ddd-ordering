@@ -5,14 +5,14 @@ export class CreateOrderResponseDto {
 
   @IsNotEmpty()
   @IsUUID()
-  private readonly orderTrackingId: string
+  readonly orderTrackingId: string
 
   @IsEnum(OrderStatus)
   @IsNotEmpty()
-  private readonly orderStatus: OrderStatus;
+  readonly orderStatus: OrderStatus;
 
   @IsNotEmpty()
   @IsString()
-  private readonly message: string;
+  readonly message: string;
 
 }

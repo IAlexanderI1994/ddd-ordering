@@ -45,8 +45,7 @@ class KafkaSubscriber implements IMessageSource {
         if (this.bridge) {
           // for (const event of this.events) {
           //   if (event.name === topic) {
-          console.log(message)
-          console.log(message.value.toString())
+
           const parsedJson = await this.registry.decode(message.value)
           console.log(parsedJson)
           // const receivedEvent = new event(parsedJson)
