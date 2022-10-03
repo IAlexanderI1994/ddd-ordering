@@ -16,6 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@ordering/common": ["libs/common/src/index.ts"],
+      "@ordering/common/application/exception-filters": [
+        "libs/common/application/exception-filters/src/index.ts"
+      ],
       "@ordering/common/application/publisher": [
         "libs/common/application/publisher/src/index.ts"
       ],

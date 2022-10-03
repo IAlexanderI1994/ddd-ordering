@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "common": "libs/common",
+    "common-application-exception-filters": "libs/common/application/exception-filters",
     "common-application-publisher": "libs/common/application/publisher",
     "common-domain": "libs/common/domain",
     "common-infra": "libs/common/infra",

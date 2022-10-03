@@ -3,10 +3,11 @@
  * This is only a minimal backend to get started.
  */
 
-import {Logger, ValidationPipe} from '@nestjs/common';
+import { ValidationPipe} from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {Transport} from "@nestjs/microservices";
 import {AppModule} from "./app.module";
+import {AllExceptionsFilter} from "@ordering/common/application/exception-filters";
 
 
 async function bootstrap() {
@@ -18,6 +19,8 @@ async function bootstrap() {
       port: process.env.PORT || 3002
     },
   });
+  app.useGlobalFilters(new AllExceptionsFilter());
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
