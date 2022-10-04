@@ -11,10 +11,12 @@ import {
 } from "@ordering/common/domain";
 import {OrderItem} from "./order-item";
 import {randomUUID} from "crypto";
-import {OrderDomainException} from "../exception/order-domain.exception";
+import {OrderDomainException} from "../exception/OrderDomainException";
 
 export class Order extends AggregateRoot<OrderId> {
 
+
+  static FAILURE_MESSAGE_DELIMITER = ','
   private readonly _customerId: CustomerId;
   private readonly _restaurantId: RestaurantId;
   private readonly _deliveryAddress: StreetAddress;
@@ -129,7 +131,7 @@ export class Order extends AggregateRoot<OrderId> {
     return new Order.Builder();
   }
 
-  static Builder = class {
+  private static Builder = class {
 
     get orderId(): OrderId {
       return this._orderId;

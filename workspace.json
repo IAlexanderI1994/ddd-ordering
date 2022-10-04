@@ -8,6 +8,8 @@
     "common-domain": "libs/common/domain",
     "common-infra": "libs/common/infra",
     "common-types": "libs/common/types",
+    "infra-data-access": "libs/infra/data-access",
+    "infra-data-access-orders": "libs/infra/data-access/orders",
     "infra-kafka": "libs/infra/kafka",
     "ordering": "apps/ordering",
     "orders-domain": "libs/orders/domain",

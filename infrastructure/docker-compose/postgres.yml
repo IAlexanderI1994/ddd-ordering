@@ -1,0 +1,12 @@
+db:
+  image: postgres:11
+  restart: on-failure
+  container_name: orders_db
+  ports:
+    - "5432:5432"
+  environment:
+    POSTGRES_DB: ordering
+    POSTGRES_USER: root
+    POSTGRES_PASSWORD: root
+  volumes:
+    - dbdata:/var/lib/postgresql/data
