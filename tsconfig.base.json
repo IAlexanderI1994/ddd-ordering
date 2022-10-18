@@ -26,10 +26,17 @@
       "@ordering/common/infra": ["libs/common/infra/src/index.ts"],
       "@ordering/common/types": ["libs/common/types/src/index.ts"],
       "@ordering/infra/data-access": ["libs/infra/data-access/src/index.ts"],
+      "@ordering/infra/data-access/customer": [
+        "libs/infra/data-access/customer/src/index.ts"
+      ],
       "@ordering/infra/data-access/orders": [
         "libs/infra/data-access/orders/src/index.ts"
       ],
+      "@ordering/infra/data-access/restaurant": [
+        "libs/infra/data-access/restaurant/src/index.ts"
+      ],
       "@ordering/infra/kafka": ["libs/infra/kafka/src/index.ts"],
+      "@ordering/orders/application": ["libs/orders/application/src/index.ts"],
       "@ordering/orders/domain": ["libs/orders/domain/src/index.ts"],
       "@ordering/test-utils": ["libs/test-utils/src/index.ts"]
     }
