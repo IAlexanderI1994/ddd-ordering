@@ -5,3 +5,5 @@ docker-compose -f ./infrastructure/docker-compose/common.yml -f ./infrastructure
 
 docker-compose -f ./infrastructure/docker-compose/postgres.yml up 
 
+
+kafka.order.avro.model.PaymentRequestAvroModel

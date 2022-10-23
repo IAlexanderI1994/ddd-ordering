@@ -38,6 +38,7 @@
       "@ordering/infra/kafka": ["libs/infra/kafka/src/index.ts"],
       "@ordering/orders/application": ["libs/orders/application/src/index.ts"],
       "@ordering/orders/domain": ["libs/orders/domain/src/index.ts"],
+      "@ordering/orders/messaging": ["libs/orders/messaging/src/index.ts"],
       "@ordering/test-utils": ["libs/test-utils/src/index.ts"]
     }
   },

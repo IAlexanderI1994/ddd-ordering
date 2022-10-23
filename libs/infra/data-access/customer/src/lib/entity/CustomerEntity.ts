@@ -1,7 +1,9 @@
-import { Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, ViewEntity} from "typeorm";
 
-@Entity({
-  name: 'customers'
+@ViewEntity({
+  materialized: true,
+  name: 'order_customer_m_view',
+  schema: 'customers'
 })
 export class CustomerEntity {
 

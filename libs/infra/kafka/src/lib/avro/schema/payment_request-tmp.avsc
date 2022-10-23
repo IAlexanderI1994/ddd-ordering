@@ -1,0 +1,21 @@
+{
+  "namespace": "kafka.order.avro.model",
+  "type": "record",
+  "name": "PaymentRequestAvroModel",
+  "fields": [
+    {
+      "name": "id",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "sagaId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    }
+  ]
+}

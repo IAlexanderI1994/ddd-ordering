@@ -54,7 +54,7 @@ export class KafkaModule {
         provide: 'KAFKA_REGISTRY',
         useFactory: async () => {
           const registry = new SchemaRegistry({host: config.schemaRegistryHost, clientId: config.clientId})
-          const schema = await readAVSCAsync(path.join(__dirname, '../avro/payment_request-tmp.avsc'))
+          const schema = await readAVSCAsync(path.join(__dirname, '../avro/schema/payment_request-tmp.avsc'))
           const {id} = await registry.register(schema)
 
           return {registry, registryId: id}

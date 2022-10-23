@@ -1,1 +1,1 @@
-export * from './lib/infra-kafka';
+export * from './lib/avro/models/PaymentRequestAvroModel';

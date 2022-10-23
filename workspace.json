@@ -16,6 +16,7 @@
     "ordering": "apps/ordering",
     "orders-application": "libs/orders/application",
     "orders-domain": "libs/orders/domain",
+    "orders-messaging": "libs/orders/messaging",
     "test-utils": "libs/test-utils"
   }
 }

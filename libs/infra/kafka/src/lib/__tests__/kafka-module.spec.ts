@@ -4,7 +4,6 @@ import {KafkaModule} from "../components/kafka.module";
 import {CommandBus, CqrsModule, EventBus, QueryBus} from "@nestjs/cqrs";
 import {TestingEventPublisher} from "@ordering/test-utils";
 import {PaymentRequest} from "./event.mock";
-import {OrderStatus} from "@ordering/common/domain";
 import {randomUUID} from "crypto";
 
 jest.setTimeout(30000)
@@ -62,9 +61,9 @@ describe(KafkaModule, () => {
 
   it('should correctly process event', async function () {
 
-    const result = await publisher.publish(new PaymentRequest( randomUUID()))
+    const result = await publisher.publish(new PaymentRequest( randomUUID(), randomUUID()))
 
-    await new Promise(r => setTimeout(r, 10000))
+    await new Promise(r => setTimeout(r, 1000))
   });
 
 
