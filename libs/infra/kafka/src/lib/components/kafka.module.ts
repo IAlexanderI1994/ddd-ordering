@@ -1,7 +1,7 @@
 import {DynamicModule, Module} from "@nestjs/common";
 import {CqrsModule, EventBus} from "@nestjs/cqrs";
 import KafkaSubscriber from "./KafkaSubscriber";
-import KafkaPublisher from "./KafkaPublisher";
+import KafkaProducer from "./KafkaProducer";
 import {readAVSCAsync, SchemaRegistry, SchemaType} from "@kafkajs/confluent-schema-registry";
 import * as path from "path";
 
@@ -18,7 +18,7 @@ type KafkaModuleConfig = {
 export class KafkaModule {
   constructor(
     private readonly event$: EventBus,
-    private readonly kafkaPublisher: KafkaPublisher,
+    private readonly kafkaProducer: KafkaProducer,
     private readonly kafkaSubscriber: KafkaSubscriber,
   ) {
   }
@@ -28,8 +28,8 @@ export class KafkaModule {
     await this.kafkaSubscriber.connect();
     this.kafkaSubscriber.bridgeEventsTo(this.event$.subject$);
 
-    await this.kafkaPublisher.connect();
-    this.event$.publisher = this.kafkaPublisher;
+    await this.kafkaProducer.connect();
+    // this.event$.publisher = this.kafkaProducer;
     console.log('KAFKA INITED!');
 
   }
@@ -54,7 +54,7 @@ export class KafkaModule {
         provide: 'KAFKA_REGISTRY',
         useFactory: async () => {
           const registry = new SchemaRegistry({host: config.schemaRegistryHost, clientId: config.clientId})
-          const schema = await readAVSCAsync(path.join(__dirname, '../avro/schema/payment_request-tmp.avsc'))
+          const schema = await readAVSCAsync(path.join(__dirname, '../avro/schema/payment_request.avsc'))
           const {id} = await registry.register(schema)
 
           return {registry, registryId: id}
@@ -64,7 +64,7 @@ export class KafkaModule {
         provide: 'KAFKA_BROKERS',
         useValue: config.brokers
       },
-      KafkaPublisher,
+      KafkaProducer,
       KafkaSubscriber
     ]
     return {

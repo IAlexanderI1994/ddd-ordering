@@ -1,10 +1,11 @@
 import {IEvent, IMessageSource} from '@nestjs/cqrs';
 import {Subject} from 'rxjs';
 import {Consumer, Kafka} from 'kafkajs';
-import {Inject} from '@nestjs/common';
+import {Inject, Injectable} from '@nestjs/common';
 import {SchemaRegistry} from "@kafkajs/confluent-schema-registry";
 
-class KafkaSubscriber implements IMessageSource {
+@Injectable()
+export class KafkaSubscriber implements IMessageSource {
 
   private readonly kafkaConsumer: Consumer
   private bridge: Subject<any>

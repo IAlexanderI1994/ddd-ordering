@@ -5,8 +5,8 @@ import {OrderCreatedEvent} from "../events/order-created.event";
 import {OrderCancelledEvent} from "../events/order-cancelled.event";
 import {OrderPaidEvent} from "../events/order-paid.event";
 import {Logger} from "@nestjs/common";
-import {OrderDomainException} from "../exception/order-domain.exception";
 import {Product} from "../entity/product";
+import {OrderDomainException} from "../exception/OrderDomainException";
 
 
 export class OrderDomainService implements OrderDomainServiceInterface {

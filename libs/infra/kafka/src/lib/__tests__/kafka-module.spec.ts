@@ -1,19 +1,29 @@
-import {INestApplication} from '@nestjs/common';
+import {ConsoleLogger, INestApplication} from '@nestjs/common';
 import {Test, TestingModule} from '@nestjs/testing';
 import {KafkaModule} from "../components/kafka.module";
 import {CommandBus, CqrsModule, EventBus, QueryBus} from "@nestjs/cqrs";
-import {TestingEventPublisher} from "@ordering/test-utils";
-import {PaymentRequest} from "./event.mock";
+import { PaymentRequestAvroModel} from "@ordering/infra/kafka";
+import axios from 'axios'
 import {randomUUID} from "crypto";
+import {
+  CreateOrderKafkaMessagePublisher
+} from "@ordering/orders/messaging";
+import {OrderMessagingDataMapper} from "../../../../../orders/messaging/src/lib/mappers/OrderMessagingDataMapper";
+import {Order, OrderCreatedEvent} from "@ordering/orders/domain";
+import {ConfigModule} from "@nestjs/config";
+import {CustomerId, Money, OrderId, OrderStatus} from "@ordering/common/domain";
 
 jest.setTimeout(30000)
 describe(KafkaModule, () => {
   let app: INestApplication;
-  let publisher: TestingEventPublisher;
+  let publisher: CreateOrderKafkaMessagePublisher;
 
+
+  process.env.PAYMENT_REQUEST_TOPIC_NAME = 'payment_request'
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
+        ConfigModule,
         CqrsModule,
         KafkaModule.forRootAsync({
           brokers: [
@@ -32,7 +42,7 @@ describe(KafkaModule, () => {
         EventBus,
         CommandBus,
         QueryBus,
-        TestingEventPublisher
+        CreateOrderKafkaMessagePublisher
       ]
     })
       .overrideProvider('KAFKA_BROKERS')
@@ -44,10 +54,18 @@ describe(KafkaModule, () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
-    publisher = app.get<TestingEventPublisher>(TestingEventPublisher)
 
+    publisher = app.get<CreateOrderKafkaMessagePublisher>(CreateOrderKafkaMessagePublisher)
+
+    app.useLogger(new ConsoleLogger())
     await app.init();
   });
+
+  beforeEach(async () => {
+
+
+    await axios.delete('http://localhost:8081/subjects/kafka.order.avro.model.PaymentRequestAvroModel')
+  })
 
   afterAll(async () => {
     await app.close();
@@ -61,7 +79,17 @@ describe(KafkaModule, () => {
 
   it('should correctly process event', async function () {
 
-    const result = await publisher.publish(new PaymentRequest( randomUUID(), randomUUID()))
+    const order: Order = Order
+      .builder()
+      .setCustomerId(new CustomerId(randomUUID()))
+      .setOrderId(new OrderId(randomUUID()))
+      .setOrderStatus( OrderStatus.PENDING)
+      .setPrice(new Money(1000))
+      .build()
+    const orderCreatedEvent = new OrderCreatedEvent(order, new Date().toISOString())
+
+    const result = await publisher.publish( orderCreatedEvent)
+
 
     await new Promise(r => setTimeout(r, 1000))
   });

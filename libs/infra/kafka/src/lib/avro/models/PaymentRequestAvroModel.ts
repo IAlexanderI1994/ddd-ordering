@@ -10,9 +10,18 @@ export type PaymentRequestAvroModelData = {
   paymentOrderStatus: OrderStatus
 
 }
-export class PaymentRequestAvroModel {
+export class PaymentRequestAvroModel implements PaymentRequestAvroModelData{
   constructor(
-    private readonly data: PaymentRequestAvroModelData
+    data: PaymentRequestAvroModelData
   ) {
+    Object.assign(this, data)
   }
+
+  id: string;
+  sagaId: string;
+  createdAt: string;
+  customerId: string;
+  orderId: string;
+  paymentOrderStatus: OrderStatus;
+  price: number;
 }

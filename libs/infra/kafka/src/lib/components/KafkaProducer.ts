@@ -1,10 +1,9 @@
-import { IEventPublisher } from '@nestjs/cqrs';
-import {Kafka, Partitioners, Producer} from 'kafkajs';
-import { Inject } from '@nestjs/common';
-import * as _ from 'lodash'
+import {Kafka, Partitioners, Producer, RecordMetadata} from 'kafkajs';
+import {Inject, Injectable} from '@nestjs/common';
 import {SchemaRegistry} from "@kafkajs/confluent-schema-registry";
 
-class KafkaPublisher implements IEventPublisher {
+@Injectable()
+export class KafkaProducer {
 
   private readonly kafkaProducer: Producer
   private readonly registry: SchemaRegistry;
@@ -30,9 +29,8 @@ class KafkaPublisher implements IEventPublisher {
     await this.kafkaProducer.connect();
   }
 
-  async publish<T>(event: T): Promise<any> {
-    const topic = _.snakeCase(event.constructor.name)
-    this.kafkaProducer.send({
+  async publish<T>( topic: string, event: T): Promise<RecordMetadata[]> {
+   return await this.kafkaProducer.send({
       topic,
       messages: [
         {
@@ -43,4 +41,4 @@ class KafkaPublisher implements IEventPublisher {
   }
 }
 
-export default KafkaPublisher
+export default KafkaProducer
