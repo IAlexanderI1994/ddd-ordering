@@ -3,56 +3,45 @@ import {Subject} from 'rxjs';
 import {Consumer, Kafka} from 'kafkajs';
 import {Inject, Injectable} from '@nestjs/common';
 import {SchemaRegistry} from "@kafkajs/confluent-schema-registry";
+import {KAFKA_SCHEMA, KAFKA_TOPIC} from "../tokens";
 
 @Injectable()
 export class KafkaSubscriber implements IMessageSource {
 
   private readonly kafkaConsumer: Consumer
   private bridge: Subject<any>
-  private readonly events: Array<any>;
   private readonly registry: SchemaRegistry;
   private readonly registryId: number;
 
   constructor(
     @Inject('KAFKA_BROKERS') brokers: string[],
-    @Inject('EVENTS') events: Array<any>,
     @Inject('CLIENT_ID') clientId: string,
     @Inject('GROUP_ID') groupId: string,
-    @Inject('KAFKA_REGISTRY') schemaRegistry: { registry: SchemaRegistry, registryId: number }
+    @Inject(KAFKA_SCHEMA) schema: { registry: SchemaRegistry, registryId: number },
+    @Inject(KAFKA_TOPIC) private readonly topic: string
   ) {
     const kafka = new Kafka({
       brokers,
       clientId,
     })
 
-    this.events = events;
     this.kafkaConsumer = kafka.consumer({groupId});
-    this.registry = schemaRegistry.registry;
-    this.registryId = schemaRegistry.registryId
+    this.registry = schema.registry;
+    this.registryId = schema.registryId
   }
 
   async connect(): Promise<void> {
 
-
     await this.kafkaConsumer.connect();
-    // for (const event of this.events) {
-    //todo: refactor topic
     await this.kafkaConsumer.subscribe({topic: 'payment_request', fromBeginning: false})
-    // }
-
 
     await this.kafkaConsumer.run({
       eachMessage: async ({topic, partition, message}) => {
         if (this.bridge) {
-          // for (const event of this.events) {
-          //   if (event.name === topic) {
-
-          const parsedJson = await this.registry.decode(message.value)
-          console.log(parsedJson)
-          // const receivedEvent = new event(parsedJson)
-          // this.bridge.next(receivedEvent)
-          //   }
-          // }
+          if ( topic === this.topic) {
+            const parsedJson = await this.registry.decode(message.value)
+            console.log(parsedJson)
+          }
         }
       }
     })

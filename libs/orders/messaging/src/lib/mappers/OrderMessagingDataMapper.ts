@@ -1,7 +1,10 @@
-import {OrderCancelledEvent, OrderCreatedEvent} from "@ordering/orders/domain";
+import {OrderCancelledEvent, OrderCreatedEvent, OrderPaidEvent} from "@ordering/orders/domain";
 import {PaymentRequestAvroModel} from "@ordering/infra/kafka";
 import {randomUUID} from "crypto";
 import {OrderStatus} from "@ordering/common/domain";
+import {
+  RestaurantApprovalRequestAvroModel
+} from "../../../../../infra/kafka/src/lib/avro/models/RestaurantApprovalRequestAvroModel";
 
 export class OrderMessagingDataMapper {
   static orderCreatedEventToPaymentRequestAvroModel(orderCreatedEvent: OrderCreatedEvent): PaymentRequestAvroModel {
@@ -25,7 +28,22 @@ export class OrderMessagingDataMapper {
       customerId: order.customerId.getValue(),
       id: randomUUID(),
       orderId: order.getId().getValue(),
-      paymentOrderStatus: OrderStatus.PENDING,
+      paymentOrderStatus: OrderStatus.CANCELLED,
+      price: order.price.amount,
+      sagaId: ""
+    })
+  }
+  static orderPaidEventToRestaurantApprovalRequestAvroModel(orderPaidEvent: OrderPaidEvent): RestaurantApprovalRequestAvroModel {
+
+    const {order} = orderPaidEvent
+
+    return new RestaurantApprovalRequestAvroModel({
+      products: [],
+      createdAt: orderPaidEvent.createdAt,
+      restaurantId: order.restaurantId.getValue().toString(),
+      id: randomUUID(),
+      orderId: order.getId().getValue(),
+      restaurantOrderStatus: OrderStatus.PAID,
       price: order.price.amount,
       sagaId: ""
     })

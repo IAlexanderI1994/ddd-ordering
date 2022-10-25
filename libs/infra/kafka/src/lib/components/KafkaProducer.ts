@@ -1,6 +1,7 @@
 import {Kafka, Partitioners, Producer, RecordMetadata} from 'kafkajs';
 import {Inject, Injectable} from '@nestjs/common';
 import {SchemaRegistry} from "@kafkajs/confluent-schema-registry";
+import { KAFKA_SCHEMA, KAFKA_TOPIC} from "../tokens";
 
 @Injectable()
 export class KafkaProducer {
@@ -12,7 +13,8 @@ export class KafkaProducer {
   constructor(
     @Inject('KAFKA_BROKERS') brokers: string[],
     @Inject('CLIENT_ID') clientId: string,
-    @Inject('KAFKA_REGISTRY') schemaRegistry: { registry: SchemaRegistry, registryId: number }
+    @Inject(KAFKA_TOPIC) private readonly topic: string,
+    @Inject(KAFKA_SCHEMA) schema: { registry: SchemaRegistry, registryId: number }
 
   ) {
     const kafka = new Kafka({
@@ -21,17 +23,17 @@ export class KafkaProducer {
     })
 
     this.kafkaProducer = kafka.producer({ createPartitioner: Partitioners.DefaultPartitioner });
-    this.registry = schemaRegistry.registry;
-    this.registryId = schemaRegistry.registryId
+    this.registry = schema.registry;
+    this.registryId = schema.registryId
   }
 
   async connect(): Promise<void> {
     await this.kafkaProducer.connect();
   }
 
-  async publish<T>( topic: string, event: T): Promise<RecordMetadata[]> {
+  async publish<T>( event: T): Promise<RecordMetadata[]> {
    return await this.kafkaProducer.send({
-      topic,
+      topic: this.topic,
       messages: [
         {
           value: await this.registry.encode(this.registryId, event),

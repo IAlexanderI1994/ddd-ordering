@@ -2,16 +2,18 @@ import {ConsoleLogger, INestApplication} from '@nestjs/common';
 import {Test, TestingModule} from '@nestjs/testing';
 import {KafkaModule} from "../components/kafka.module";
 import {CommandBus, CqrsModule, EventBus, QueryBus} from "@nestjs/cqrs";
-import { PaymentRequestAvroModel} from "@ordering/infra/kafka";
 import axios from 'axios'
 import {randomUUID} from "crypto";
 import {
   CreateOrderKafkaMessagePublisher
 } from "@ordering/orders/messaging";
-import {OrderMessagingDataMapper} from "../../../../../orders/messaging/src/lib/mappers/OrderMessagingDataMapper";
-import {Order, OrderCreatedEvent} from "@ordering/orders/domain";
+import {Order, OrderCreatedEvent, OrderPaidEvent} from "@ordering/orders/domain";
 import {ConfigModule} from "@nestjs/config";
 import {CustomerId, Money, OrderId, OrderStatus} from "@ordering/common/domain";
+import * as path from "path";
+import {
+  PaymentRequestMessagingModule
+} from "../../../../../orders/messaging/src/lib/modules/PaymentRequestMessagingModule";
 
 jest.setTimeout(30000)
 describe(KafkaModule, () => {
@@ -32,17 +34,21 @@ describe(KafkaModule, () => {
             'kafka-broker-3:39092:19092'
           ],
           clientId: "ordering-app",
-          events: [],
           groupId: "ordering-group",
-          // schemaRegistryHost: "http://schema-registry:8081/"
           schemaRegistryHost: "http://localhost:8081/"
-        })
+        }),
+        KafkaModule.forConsumer(
+          {
+            schemaPath: path.join(__dirname, './avro/payment_request.avsc'),
+            topic: "payment_request"
+          }
+        ),
+        PaymentRequestMessagingModule
       ],
       providers: [
         EventBus,
         CommandBus,
         QueryBus,
-        CreateOrderKafkaMessagePublisher
       ]
     })
       .overrideProvider('KAFKA_BROKERS')
@@ -77,18 +83,35 @@ describe(KafkaModule, () => {
     expect(publisher).toBeDefined()
   });
 
-  it('should correctly process event', async function () {
+  it('should correctly process created event', async function () {
 
     const order: Order = Order
       .builder()
       .setCustomerId(new CustomerId(randomUUID()))
       .setOrderId(new OrderId(randomUUID()))
-      .setOrderStatus( OrderStatus.PENDING)
+      .setOrderStatus(OrderStatus.PENDING)
       .setPrice(new Money(1000))
       .build()
     const orderCreatedEvent = new OrderCreatedEvent(order, new Date().toISOString())
 
-    const result = await publisher.publish( orderCreatedEvent)
+    const result = await publisher.publish(orderCreatedEvent)
+
+
+    await new Promise(r => setTimeout(r, 1000))
+  });
+
+  it('should correctly process restaurant approval event', async function () {
+
+    const order: Order = Order
+      .builder()
+      .setCustomerId(new CustomerId(randomUUID()))
+      .setOrderId(new OrderId(randomUUID()))
+      .setOrderStatus(OrderStatus.PENDING)
+      .setPrice(new Money(1000))
+      .build()
+    const orderPaidEvent = new OrderPaidEvent(order, new Date().toISOString())
+
+    const result = await publisher.publish(orderPaidEvent)
 
 
     await new Promise(r => setTimeout(r, 1000))
