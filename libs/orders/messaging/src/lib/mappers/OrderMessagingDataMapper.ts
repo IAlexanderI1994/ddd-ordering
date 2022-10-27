@@ -1,4 +1,4 @@
-import {OrderCancelledEvent, OrderCreatedEvent, OrderPaidEvent} from "@ordering/orders/domain";
+import {OrderCancelledEvent, OrderCreatedEvent, OrderPaidEvent, Product} from "@ordering/orders/domain";
 import {PaymentRequestAvroModel} from "@ordering/infra/kafka";
 import {randomUUID} from "crypto";
 import {OrderStatus} from "@ordering/common/domain";
@@ -38,7 +38,10 @@ export class OrderMessagingDataMapper {
     const {order} = orderPaidEvent
 
     return new RestaurantApprovalRequestAvroModel({
-      products: [],
+      products: order.items.map(i => ({
+        id: i.getId().getValue().toString(),
+        quantity: i.quantity
+      })),
       createdAt: orderPaidEvent.createdAt,
       restaurantId: order.restaurantId.getValue().toString(),
       id: randomUUID(),

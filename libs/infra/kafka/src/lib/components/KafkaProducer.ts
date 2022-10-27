@@ -1,7 +1,8 @@
 import {Kafka, Partitioners, Producer, RecordMetadata} from 'kafkajs';
 import {Inject, Injectable} from '@nestjs/common';
 import {SchemaRegistry} from "@kafkajs/confluent-schema-registry";
-import { KAFKA_SCHEMA, KAFKA_TOPIC} from "../tokens";
+import {CLIENT_ID, KAFKA_BROKERS, KAFKA_CONFIG, KAFKA_SCHEMA} from "../tokens";
+import {KafkaProducerConfig} from "../types";
 
 @Injectable()
 export class KafkaProducer {
@@ -11,9 +12,9 @@ export class KafkaProducer {
   private readonly registryId: number;
 
   constructor(
-    @Inject('KAFKA_BROKERS') brokers: string[],
-    @Inject('CLIENT_ID') clientId: string,
-    @Inject(KAFKA_TOPIC) private readonly topic: string,
+    @Inject(KAFKA_BROKERS) brokers: string[],
+    @Inject(CLIENT_ID) clientId: string,
+    @Inject(KAFKA_CONFIG) private readonly config: KafkaProducerConfig,
     @Inject(KAFKA_SCHEMA) schema: { registry: SchemaRegistry, registryId: number }
 
   ) {
@@ -33,7 +34,7 @@ export class KafkaProducer {
 
   async publish<T>( event: T): Promise<RecordMetadata[]> {
    return await this.kafkaProducer.send({
-      topic: this.topic,
+      topic: this.config.topic,
       messages: [
         {
           value: await this.registry.encode(this.registryId, event),

@@ -3,20 +3,9 @@ import {CqrsModule, EventBus} from "@nestjs/cqrs";
 import {readAVSCAsync, SchemaRegistry} from "@kafkajs/confluent-schema-registry";
 import KafkaSubscriber from "./KafkaSubscriber";
 import KafkaProducer from "./KafkaProducer";
-import {KAFKA_REGISTRY, KAFKA_SCHEMA, KAFKA_TOPIC} from "../tokens";
+import {CLIENT_ID, KAFKA_BROKERS, KAFKA_CONFIG, KAFKA_REGISTRY, KAFKA_SCHEMA} from "../tokens";
+import {KafkaConsumerConfig, KafkaModuleConfig, KafkaOptions, KafkaProducerConfig} from "../types";
 
-
-type KafkaModuleConfig = {
-  clientId: string;
-  groupId: string;
-  schemaRegistryHost: string;
-  brokers: string[];
-}
-
-type PublisherConfig = {
-  topic: string;
-  schemaPath: string
-}
 
 @Module({})
 export class KafkaModule {
@@ -35,24 +24,19 @@ export class KafkaModule {
     await this.kafkaProducer?.connect();
   }
 
-
   static forRootAsync(config: KafkaModuleConfig): DynamicModule {
 
     const providers = [
       {
-        provide: 'CLIENT_ID',
+        provide: CLIENT_ID,
         useValue: config.clientId
-      },
-      {
-        provide: 'GROUP_ID',
-        useValue: config.groupId
       },
       {
         provide: KAFKA_REGISTRY,
         useValue: new SchemaRegistry({host: config.schemaRegistryHost, clientId: config.clientId})
       },
       {
-        provide: 'KAFKA_BROKERS',
+        provide: KAFKA_BROKERS,
         useValue: config.brokers
       },
       // KafkaProducer,
@@ -67,15 +51,15 @@ export class KafkaModule {
     }
   }
 
-  static forProducer(config: PublisherConfig): DynamicModule {
-
+  static forProducerAsync(options: KafkaOptions<KafkaProducerConfig>): DynamicModule {
+    const { schemaPath} = options
 
     return {
       providers: [
         {
           provide: KAFKA_SCHEMA,
           useFactory: async (registry: SchemaRegistry) => {
-            const schema = await readAVSCAsync(config.schemaPath)
+            const schema = await readAVSCAsync(schemaPath)
             const {id} = await registry.register(schema)
 
             return {registry, registryId: id}
@@ -83,8 +67,9 @@ export class KafkaModule {
           inject: [KAFKA_REGISTRY]
         },
         {
-          provide: KAFKA_TOPIC,
-          useValue: config.topic,
+          provide: KAFKA_CONFIG,
+          useFactory: options.config.useFactory,
+          inject: options.config.inject
         },
         KafkaProducer
       ],
@@ -96,15 +81,15 @@ export class KafkaModule {
 
   }
 
-  static forConsumer(config: PublisherConfig): DynamicModule {
+  static forConsumerAsync(options: KafkaOptions<KafkaConsumerConfig>): DynamicModule {
 
-
+    const { schemaPath } = options
     return {
       providers: [
         {
           provide: KAFKA_SCHEMA,
           useFactory: async (registry: SchemaRegistry) => {
-            const schema = await readAVSCAsync(config.schemaPath)
+            const schema = await readAVSCAsync(schemaPath)
             const {id} = await registry.register(schema)
 
             return {registry, registryId: id}
@@ -112,8 +97,9 @@ export class KafkaModule {
           inject: [KAFKA_REGISTRY]
         },
         {
-          provide: KAFKA_TOPIC,
-          useValue: config.topic,
+          provide: KAFKA_CONFIG,
+          useFactory: options.config.useFactory,
+          inject: options.config.inject
         },
         KafkaSubscriber
       ],
@@ -122,8 +108,6 @@ export class KafkaModule {
       ],
       module: KafkaModule
     }
-
   }
-
 
 }

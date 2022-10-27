@@ -1,6 +1,6 @@
 import {OrderStatus} from "@ordering/common/domain";
-import {Product} from "@ordering/orders/domain";
 
+export type ProductsList = Array<{ id: string, quantity: number }>
 export type RestaurantApprovalRequestAvroModelData = {
   id: string;
   sagaId: string;
@@ -9,11 +9,11 @@ export type RestaurantApprovalRequestAvroModelData = {
   price: number;
   createdAt: string;
   restaurantOrderStatus: OrderStatus.PAID,
-  products: Array<typeof Product>
+  products: ProductsList
 }
 
 
-export class RestaurantApprovalRequestAvroModel implements RestaurantApprovalRequestAvroModelData{
+export class RestaurantApprovalRequestAvroModel implements RestaurantApprovalRequestAvroModelData {
   constructor(
     data: RestaurantApprovalRequestAvroModelData
   ) {
@@ -24,7 +24,7 @@ export class RestaurantApprovalRequestAvroModel implements RestaurantApprovalReq
   id: string;
   orderId: string;
   price: number;
-  products: Array<typeof Product>;
+  products: ProductsList;
   restaurantId: string;
   restaurantOrderStatus: OrderStatus.PAID;
   sagaId: string;
