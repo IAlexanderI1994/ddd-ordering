@@ -17,3 +17,7 @@ export type KafkaProducerConfig = {
   topic: string;
 }
 export type KafkaConsumerConfig = KafkaProducerConfig & {   groupId: string; }
+
+export interface KafkaVisitor {
+  visit(...args);
+}

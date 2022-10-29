@@ -18,38 +18,57 @@ import {Order, OrderCreatedEvent, OrderItem, OrderPaidEvent} from "@ordering/ord
 import {ConfigModule, ConfigService} from "@nestjs/config";
 import {CustomerId, Money, OrderId, OrderItemId, OrderStatus, RestaurantId} from "@ordering/common/domain";
 import * as path from "path";
-import {KAFKA_BROKERS} from "../tokens";
+import {KAFKA_BROKERS, KAFKA_EVENT_VISITOR} from "../tokens";
+import {TestModule} from "./test-module";
 
 jest.setTimeout(30000)
 describe(KafkaModule, () => {
+
   let app: INestApplication;
+
+
+  let mockFn = jest.fn();
+  let promiseResolve;
+  let promise: Promise<any>;
+
+
   let createOrderKafkaMessagePublisher: CreateOrderKafkaMessagePublisher;
   let payOrderKafkaMessagePublisher: PayOrderKafkaMessagePublisher;
 
-  process.env[PAYMENT_REQUEST_TOPIC_NAME] = 'payment_request'
-  process.env[PAYMENT_GROUP_ID]= 'payment-group'
-  process.env[RESTAURANT_APPROVAL_REQUEST_TOPIC_NAME] = 'restaurant_approval_request'
-  process.env[RESTAURANT_GROUP_ID]= 'restaurant-group'
 
-  beforeAll(async () => {
+  process.env[PAYMENT_REQUEST_TOPIC_NAME] = 'payment_request'
+  process.env[PAYMENT_GROUP_ID] = 'payment-group'
+  process.env[RESTAURANT_APPROVAL_REQUEST_TOPIC_NAME] = 'restaurant_approval_request'
+  process.env[RESTAURANT_GROUP_ID] = 'restaurant-group'
+
+  beforeEach(async () => {
     const prefix = 'http://localhost:8081/subjects/com.food.ordering.system.kafka.order.avro.model'
     const revalidateSchemas = [
-      `${prefix}.PaymentRequestAvroModel`,
-      `${prefix}.RestaurantApprovalRequestAvroModel`,
-    ]
+      `PaymentRequestAvroModel`,
+      `RestaurantApprovalRequestAvroModel`,
+    ].map(name => `${prefix}.${name}`)
 
     try {
       const res = await Promise.all(
-        revalidateSchemas.map(schema => axios.delete(schema) )
+        revalidateSchemas.map(schema => axios.delete(schema))
       )
 
-    }
-    catch (e) {
+    } catch (e) {
 
+      console.error(e)
     }
+    const resetPromise = () => {
+      promise = new Promise<any>(r => {
+        promiseResolve = r
+      })
+    }
+    resetPromise()
+    mockFn.mockClear()
+
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
+        TestModule,
         ConfigModule.forRoot({isGlobal: true}),
         CqrsModule,
         KafkaModule.forRootAsync({
@@ -89,7 +108,6 @@ describe(KafkaModule, () => {
             }
           }
         ),
-
         PaymentRequestMessagingModule,
         RestaurantRequestMessagingModule
       ],
@@ -105,6 +123,16 @@ describe(KafkaModule, () => {
         'localhost:29092:29092',
         'localhost:39092:39092'
       ])
+      .overrideProvider(KAFKA_EVENT_VISITOR)
+      .useValue(
+        {
+          visit: (...args) => {
+            console.log(args)
+            mockFn()
+            promiseResolve()
+          }
+        }
+      )
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -114,11 +142,11 @@ describe(KafkaModule, () => {
 
     app.useLogger(new ConsoleLogger())
     await app.init();
+
+
   });
 
   beforeEach(async () => {
-
-
 
   })
 
@@ -151,8 +179,8 @@ describe(KafkaModule, () => {
 
   it('should correctly process restaurant approval event', async function () {
 
-
-    const items = Array.apply(null, {length: 4}).map(i =>OrderItem
+    expect.assertions(1)
+    const items = Array.apply(null, {length: 4}).map(i => OrderItem
       .builder()
       .setOrderItemId(new OrderItemId(randomUUID()))
       .setQuantity(2)
@@ -166,14 +194,16 @@ describe(KafkaModule, () => {
       .setOrderId(new OrderId(randomUUID()))
       .setOrderStatus(OrderStatus.PENDING)
       .setPrice(new Money(1000))
-      .setItems( items)
+      .setItems(items)
       .build()
     const orderPaidEvent = new OrderPaidEvent(order, new Date().toISOString())
 
-    const result = await payOrderKafkaMessagePublisher.publish(orderPaidEvent)
+    await payOrderKafkaMessagePublisher.publish(orderPaidEvent)
 
 
-    await new Promise(r => setTimeout(r, 1000))
+
+    expect(mockFn).toHaveBeenCalledTimes(1)
+
   });
 
 
