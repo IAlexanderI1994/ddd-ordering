@@ -20,6 +20,8 @@ import {CustomerId, Money, OrderId, OrderItemId, OrderStatus, RestaurantId} from
 import * as path from "path";
 import {KAFKA_BROKERS, KAFKA_EVENT_VISITOR} from "../tokens";
 import {TestModule} from "./test-module";
+import {PaymentResponseHandler} from "../handlers/PaymentResponseHandler";
+import {PaymentRequestHandler} from "../handlers/PaymentRequestHandler";
 
 jest.setTimeout(30000)
 describe(KafkaModule, () => {
@@ -109,7 +111,8 @@ describe(KafkaModule, () => {
           }
         ),
         PaymentRequestMessagingModule,
-        RestaurantRequestMessagingModule
+        RestaurantRequestMessagingModule,
+        PaymentRequestHandler
       ],
       providers: [
         EventBus,
@@ -160,51 +163,59 @@ describe(KafkaModule, () => {
     expect(createOrderKafkaMessagePublisher).toBeDefined()
   });
 
-  it('should correctly process created event', async function () {
+  describe('publishers', () => {
+    it('should correctly process created event', async function () {
 
-    const order: Order = Order
-      .builder()
-      .setCustomerId(new CustomerId(randomUUID()))
-      .setOrderId(new OrderId(randomUUID()))
-      .setOrderStatus(OrderStatus.PENDING)
-      .setPrice(new Money(1000))
-      .build()
-    const orderCreatedEvent = new OrderCreatedEvent(order, new Date().toISOString())
+      const order: Order = Order
+        .builder()
+        .setCustomerId(new CustomerId(randomUUID()))
+        .setOrderId(new OrderId(randomUUID()))
+        .setOrderStatus(OrderStatus.PENDING)
+        .setPrice(new Money(1000))
+        .build()
+      const orderCreatedEvent = new OrderCreatedEvent(order, new Date().toISOString())
 
-    const result = await createOrderKafkaMessagePublisher.publish(orderCreatedEvent)
-
-
-    await new Promise(r => setTimeout(r, 1000))
-  });
-
-  it('should correctly process restaurant approval event', async function () {
-
-    expect.assertions(1)
-    const items = Array.apply(null, {length: 4}).map(i => OrderItem
-      .builder()
-      .setOrderItemId(new OrderItemId(randomUUID()))
-      .setQuantity(2)
-      .build()
-    )
-
-    const order: Order = Order
-      .builder()
-      .setCustomerId(new CustomerId(randomUUID()))
-      .setRestaurantId(new RestaurantId(randomUUID()))
-      .setOrderId(new OrderId(randomUUID()))
-      .setOrderStatus(OrderStatus.PENDING)
-      .setPrice(new Money(1000))
-      .setItems(items)
-      .build()
-    const orderPaidEvent = new OrderPaidEvent(order, new Date().toISOString())
-
-    await payOrderKafkaMessagePublisher.publish(orderPaidEvent)
+      const result = await createOrderKafkaMessagePublisher.publish(orderCreatedEvent)
 
 
+      await new Promise(r => setTimeout(r, 10000))
+    });
 
-    expect(mockFn).toHaveBeenCalledTimes(1)
+    it('should correctly process restaurant approval event', async function () {
 
-  });
+      expect.assertions(1)
+      const items = Array.apply(null, {length: 4}).map(i => OrderItem
+        .builder()
+        .setOrderItemId(new OrderItemId(randomUUID()))
+        .setQuantity(2)
+        .build()
+      )
+
+      const order: Order = Order
+        .builder()
+        .setCustomerId(new CustomerId(randomUUID()))
+        .setRestaurantId(new RestaurantId(randomUUID()))
+        .setOrderId(new OrderId(randomUUID()))
+        .setOrderStatus(OrderStatus.PENDING)
+        .setPrice(new Money(1000))
+        .setItems(items)
+        .build()
+      const orderPaidEvent = new OrderPaidEvent(order, new Date().toISOString())
+
+      await payOrderKafkaMessagePublisher.publish(orderPaidEvent)
+
+
+
+      expect(mockFn).toHaveBeenCalledTimes(1)
+
+    });
+  })
+
+  describe('listeners', () => {
+
+
+
+  })
 
 
 });

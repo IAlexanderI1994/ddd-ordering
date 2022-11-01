@@ -5,6 +5,8 @@ import {Inject, Injectable, Optional} from '@nestjs/common';
 import {SchemaRegistry} from "@kafkajs/confluent-schema-registry";
 import {CLIENT_ID, KAFKA_BROKERS, KAFKA_CONFIG, KAFKA_EVENT_VISITOR, KAFKA_SCHEMA} from "../tokens";
 import {KafkaConsumerConfig, KafkaVisitor} from "../types";
+import {EVENTS} from "../events";
+import {classToClassFromExist, plainToClass, plainToInstance} from "class-transformer";
 
 @Injectable()
 export class KafkaSubscriber implements IMessageSource {
@@ -39,9 +41,12 @@ export class KafkaSubscriber implements IMessageSource {
 
     if (this.bridge) {
       if ( topic === this.config.topic) {
-        const parsedJson = await this.registry.decode(message.value)
-
-        this.kafkaEventVisitor?.visit(parsedJson)
+        const avroModel = await this.registry.decode(message.value)
+        this.kafkaEventVisitor?.visit(avroModel)
+        const Event = EVENTS[avroModel.constructor.name]
+        if ( !Event) return;
+        const eventInstance = plainToInstance(Event, {...avroModel})
+        this.bridge.next(eventInstance)
       }
     }
 
