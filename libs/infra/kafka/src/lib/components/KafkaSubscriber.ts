@@ -1,18 +1,13 @@
-import {IEvent, IMessageSource} from '@nestjs/cqrs';
-import {Subject} from 'rxjs';
 import {Consumer, Kafka} from 'kafkajs';
 import {Inject, Injectable, Optional} from '@nestjs/common';
 import {SchemaRegistry} from "@kafkajs/confluent-schema-registry";
-import {CLIENT_ID, KAFKA_BROKERS, KAFKA_CONFIG, KAFKA_EVENT_VISITOR, KAFKA_SCHEMA} from "../tokens";
-import {KafkaConsumerConfig, KafkaVisitor} from "../types";
-import {EVENTS} from "../events";
-import {classToClassFromExist, plainToClass, plainToInstance} from "class-transformer";
+import {CLIENT_ID, KAFKA_BROKERS, KAFKA_CONFIG, KAFKA_EVENT_VISITOR, KAFKA_HANDLER, KAFKA_SCHEMA} from "../tokens";
+import {IKafkaHandler, KafkaConsumerConfig, KafkaVisitor} from "../types";
 
 @Injectable()
-export class KafkaSubscriber implements IMessageSource {
+export class KafkaSubscriber {
 
   private readonly kafkaConsumer: Consumer
-  private bridge: Subject<any>
   private readonly registry: SchemaRegistry;
   private readonly registryId: number;
 
@@ -21,14 +16,16 @@ export class KafkaSubscriber implements IMessageSource {
     @Inject(KAFKA_CONFIG) private readonly config: KafkaConsumerConfig,
     @Inject(CLIENT_ID) clientId: string,
     @Inject(KAFKA_SCHEMA) schema: { registry: SchemaRegistry, registryId: number },
-    @Optional()@Inject(KAFKA_EVENT_VISITOR) private readonly kafkaEventVisitor: KafkaVisitor
+    @Inject(KAFKA_HANDLER) private readonly handler: IKafkaHandler,
+    @Optional()
+    @Inject(KAFKA_EVENT_VISITOR) private readonly kafkaEventVisitor: KafkaVisitor
   ) {
 
     const kafka = new Kafka({
       brokers,
       clientId,
     })
-    const { groupId } = config
+    const {groupId} = config
 
     this.kafkaConsumer = kafka.consumer({groupId});
     this.registry = schema.registry;
@@ -38,18 +35,12 @@ export class KafkaSubscriber implements IMessageSource {
   }
 
   async eachMessage({topic, message}) {
-
-    if (this.bridge) {
-      if ( topic === this.config.topic) {
+      if (topic === this.config.topic) {
         const avroModel = await this.registry.decode(message.value)
-        this.kafkaEventVisitor?.visit(avroModel)
-        const Event = EVENTS[avroModel.constructor.name]
-        if ( !Event) return;
-        const eventInstance = plainToInstance(Event, {...avroModel})
-        this.bridge.next(eventInstance)
-      }
-    }
+        await this.kafkaEventVisitor?.visit(avroModel)
+        this.handler.handle(avroModel)
 
+      }
   }
 
   async connect(): Promise<void> {
@@ -60,11 +51,6 @@ export class KafkaSubscriber implements IMessageSource {
       }
     )
   }
-
-  bridgeEventsTo<T extends IEvent>(subject: Subject<T>): any {
-    this.bridge = subject
-  }
-
 }
 
 export default KafkaSubscriber;

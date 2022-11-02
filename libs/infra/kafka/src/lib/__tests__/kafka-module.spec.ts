@@ -1,7 +1,7 @@
 import {ConsoleLogger, INestApplication} from '@nestjs/common';
 import {Test, TestingModule} from '@nestjs/testing';
 import {KafkaModule} from "../components/kafka.module";
-import {CommandBus, CqrsModule, EventBus, QueryBus} from "@nestjs/cqrs";
+import { CqrsModule} from "@nestjs/cqrs";
 import axios from 'axios'
 import {randomUUID} from "crypto";
 import {
@@ -14,9 +14,9 @@ import {
   RESTAURANT_GROUP_ID,
   RestaurantRequestMessagingModule
 } from "@ordering/orders/messaging";
-import {Order, OrderCreatedEvent, OrderItem, OrderPaidEvent} from "@ordering/orders/domain";
+import {Order, OrderCreatedEvent} from "@ordering/orders/domain";
 import {ConfigModule, ConfigService} from "@nestjs/config";
-import {CustomerId, Money, OrderId, OrderItemId, OrderStatus, RestaurantId} from "@ordering/common/domain";
+import {CustomerId, Money, OrderId, OrderStatus} from "@ordering/common/domain";
 import * as path from "path";
 import {KAFKA_BROKERS, KAFKA_EVENT_VISITOR} from "../tokens";
 import {TestModule} from "./test-module";
@@ -82,23 +82,24 @@ describe(KafkaModule, () => {
           clientId: "ordering-app",
           schemaRegistryHost: "http://localhost:8081/"
         }),
+        // KafkaModule.forConsumerAsync(
+        //   {
+        //     schemaPath: path.join(__dirname, './avro/restaurant_approval_request.avsc'),
+        //     config: {
+        //       useFactory: (config: ConfigService) => {
+        //         return {
+        //           topic: config.getOrThrow<string>(RESTAURANT_APPROVAL_REQUEST_TOPIC_NAME),
+        //           groupId: config.getOrThrow<string>(RESTAURANT_GROUP_ID),
+        //         }
+        //       },
+        //       inject: [ConfigService],
+        //     }
+        //   }
+        // ),
         KafkaModule.forConsumerAsync(
           {
             schemaPath: path.join(__dirname, './avro/payment_request.avsc'),
-            config: {
-              useFactory: (config: ConfigService) => {
-                return {
-                  topic: config.getOrThrow<string>(RESTAURANT_APPROVAL_REQUEST_TOPIC_NAME),
-                  groupId: config.getOrThrow<string>(RESTAURANT_GROUP_ID),
-                }
-              },
-              inject: [ConfigService],
-            }
-          }
-        ),
-        KafkaModule.forConsumerAsync(
-          {
-            schemaPath: path.join(__dirname, './avro/payment_request.avsc'),
+            handler: PaymentRequestHandler,
             config: {
               useFactory: (config: ConfigService) => {
                 return {
@@ -112,12 +113,6 @@ describe(KafkaModule, () => {
         ),
         PaymentRequestMessagingModule,
         RestaurantRequestMessagingModule,
-        PaymentRequestHandler
-      ],
-      providers: [
-        EventBus,
-        CommandBus,
-        QueryBus,
       ]
     })
       .overrideProvider(KAFKA_BROKERS)
@@ -149,9 +144,6 @@ describe(KafkaModule, () => {
 
   });
 
-  beforeEach(async () => {
-
-  })
 
   afterAll(async () => {
     await app.close();
@@ -163,59 +155,49 @@ describe(KafkaModule, () => {
     expect(createOrderKafkaMessagePublisher).toBeDefined()
   });
 
-  describe('publishers', () => {
-    it('should correctly process created event', async function () {
+  it('should correctly process created event', async function () {
 
-      const order: Order = Order
-        .builder()
-        .setCustomerId(new CustomerId(randomUUID()))
-        .setOrderId(new OrderId(randomUUID()))
-        .setOrderStatus(OrderStatus.PENDING)
-        .setPrice(new Money(1000))
-        .build()
-      const orderCreatedEvent = new OrderCreatedEvent(order, new Date().toISOString())
+    const order: Order = Order
+      .builder()
+      .setCustomerId(new CustomerId(randomUUID()))
+      .setOrderId(new OrderId(randomUUID()))
+      .setOrderStatus(OrderStatus.PENDING)
+      .setPrice(new Money(1000))
+      .build()
+    const orderCreatedEvent = new OrderCreatedEvent(order, new Date().toISOString())
 
-      const result = await createOrderKafkaMessagePublisher.publish(orderCreatedEvent)
-
-
-      await new Promise(r => setTimeout(r, 10000))
-    });
-
-    it('should correctly process restaurant approval event', async function () {
-
-      expect.assertions(1)
-      const items = Array.apply(null, {length: 4}).map(i => OrderItem
-        .builder()
-        .setOrderItemId(new OrderItemId(randomUUID()))
-        .setQuantity(2)
-        .build()
-      )
-
-      const order: Order = Order
-        .builder()
-        .setCustomerId(new CustomerId(randomUUID()))
-        .setRestaurantId(new RestaurantId(randomUUID()))
-        .setOrderId(new OrderId(randomUUID()))
-        .setOrderStatus(OrderStatus.PENDING)
-        .setPrice(new Money(1000))
-        .setItems(items)
-        .build()
-      const orderPaidEvent = new OrderPaidEvent(order, new Date().toISOString())
-
-      await payOrderKafkaMessagePublisher.publish(orderPaidEvent)
+    const result = await createOrderKafkaMessagePublisher.publish(orderCreatedEvent)
 
 
+    await new Promise(r => setTimeout(r, 10000))
+  });
 
-      expect(mockFn).toHaveBeenCalledTimes(1)
+  // it('should correctly process restaurant approval event', async function () {
+  //
+  //   expect.assertions(1)
+  //   const items = Array.apply(null, {length: 4}).map(i => OrderItem
+  //     .builder()
+  //     .setOrderItemId(new OrderItemId(randomUUID()))
+  //     .setQuantity(2)
+  //     .build()
+  //   )
+  //
+  //   const order: Order = Order
+  //     .builder()
+  //     .setCustomerId(new CustomerId(randomUUID()))
+  //     .setRestaurantId(new RestaurantId(randomUUID()))
+  //     .setOrderId(new OrderId(randomUUID()))
+  //     .setOrderStatus(OrderStatus.PENDING)
+  //     .setPrice(new Money(1000))
+  //     .setItems(items)
+  //     .build()
+  //   const orderPaidEvent = new OrderPaidEvent(order, new Date().toISOString())
+  //
+  //   await payOrderKafkaMessagePublisher.publish(orderPaidEvent)
+  //
+  //   expect(mockFn).toHaveBeenCalledTimes(1)
+  // });
 
-    });
-  })
-
-  describe('listeners', () => {
-
-
-
-  })
 
 
 });

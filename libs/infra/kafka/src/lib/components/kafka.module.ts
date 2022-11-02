@@ -1,16 +1,17 @@
 import {DynamicModule, Module, Optional} from "@nestjs/common";
-import {CqrsModule, EventBus} from "@nestjs/cqrs";
 import {readAVSCAsync, SchemaRegistry} from "@kafkajs/confluent-schema-registry";
 import KafkaSubscriber from "./KafkaSubscriber";
 import KafkaProducer from "./KafkaProducer";
-import {CLIENT_ID, KAFKA_BROKERS, KAFKA_CONFIG, KAFKA_REGISTRY, KAFKA_SCHEMA} from "../tokens";
-import {KafkaConsumerConfig, KafkaModuleConfig, KafkaOptions, KafkaProducerConfig} from "../types";
-
+import {CLIENT_ID, KAFKA_BROKERS, KAFKA_CONFIG, KAFKA_HANDLER, KAFKA_REGISTRY, KAFKA_SCHEMA} from "../tokens";
+import {
+  KafkaModuleConfig,
+  KafkaConsumerOptions,
+  KafkaProducerOptions
+} from "../types";
 
 @Module({})
 export class KafkaModule {
   constructor(
-    private readonly event$: EventBus,
     @Optional() private readonly kafkaProducer: KafkaProducer,
     @Optional() private readonly kafkaSubscriber: KafkaSubscriber,
   ) {
@@ -19,7 +20,6 @@ export class KafkaModule {
   async onModuleInit(): Promise<any> {
 
     await this.kafkaSubscriber?.connect();
-    this.kafkaSubscriber?.bridgeEventsTo(this.event$.subject$);
 
     await this.kafkaProducer?.connect();
   }
@@ -39,20 +39,17 @@ export class KafkaModule {
         provide: KAFKA_BROKERS,
         useValue: config.brokers
       },
-      // KafkaProducer,
-      // KafkaSubscriber
     ]
     return {
       global: true,
-      imports: [CqrsModule],
       providers,
-      exports: [...providers, CqrsModule],
+      exports: [...providers],
       module: KafkaModule
     }
   }
 
-  static forProducerAsync(options: KafkaOptions<KafkaProducerConfig>): DynamicModule {
-    const { schemaPath} = options
+  static forProducerAsync(options: KafkaProducerOptions): DynamicModule {
+    const {schemaPath} = options
 
     return {
       providers: [
@@ -78,12 +75,12 @@ export class KafkaModule {
       ],
       module: KafkaModule
     }
-
   }
 
-  static forConsumerAsync(options: KafkaOptions<KafkaConsumerConfig>): DynamicModule {
 
-    const { schemaPath } = options
+  static forConsumerAsync(options: KafkaConsumerOptions): DynamicModule {
+
+    const {schemaPath} = options
     return {
       providers: [
         {
@@ -95,6 +92,10 @@ export class KafkaModule {
             return {registry, registryId: id}
           },
           inject: [KAFKA_REGISTRY]
+        },
+        {
+          provide: KAFKA_HANDLER,
+          useClass: options.handler
         },
         {
           provide: KAFKA_CONFIG,

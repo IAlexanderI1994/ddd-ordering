@@ -22,7 +22,6 @@ export class CreateOrderKafkaMessagePublisher implements IDomainEventPublisher<O
       )
       this.logger.log(`Received successful response from kafka for order id: ${avroModel.orderId}`)
       this.logger.log(JSON.stringify(response))
-
     }
     catch (e) {
       this.logger.error(`Error while sending ${PaymentRequestAvroModel.name}. Message: ${e.message}`)

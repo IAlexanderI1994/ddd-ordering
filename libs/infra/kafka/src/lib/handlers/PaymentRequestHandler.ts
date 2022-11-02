@@ -1,8 +1,17 @@
-import {EventsHandler, IEventHandler} from "@nestjs/cqrs";
-import {PaymentRequestAvroModel} from "@ordering/infra/kafka";
+import {OrderStatus} from "@ordering/common/domain";
+import {IKafkaHandler} from "../types";
 
-@EventsHandler(PaymentRequestAvroModel)
-export class PaymentRequestHandler implements IEventHandler<PaymentRequestAvroModel>{
+export type PaymentRequestAvroModel = {
+  id: string;
+  sagaId: string;
+  customerId: string;
+  orderId: string;
+  price: number;
+  createdAt: string;
+  paymentOrderStatus: OrderStatus
+
+}
+export class PaymentRequestHandler implements IKafkaHandler{
   handle(event: PaymentRequestAvroModel): any {
     console.log({event})
   }

@@ -1,10 +1,7 @@
 import {OrderCancelledEvent, OrderCreatedEvent, OrderPaidEvent, Product} from "@ordering/orders/domain";
-import {PaymentRequestAvroModel} from "@ordering/infra/kafka";
+import {PaymentRequestAvroModel, RestaurantApprovalRequestAvroModel} from "@ordering/infra/kafka";
 import {randomUUID} from "crypto";
 import {OrderStatus} from "@ordering/common/domain";
-import {
-  RestaurantApprovalRequestAvroModel
-} from "../../../../../infra/kafka/src/lib/avro/models/RestaurantApprovalRequestAvroModel";
 
 export class OrderMessagingDataMapper {
   static orderCreatedEventToPaymentRequestAvroModel(orderCreatedEvent: OrderCreatedEvent): PaymentRequestAvroModel {
