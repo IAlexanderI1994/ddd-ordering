@@ -20,8 +20,7 @@ import {CustomerId, Money, OrderId, OrderStatus} from "@ordering/common/domain";
 import * as path from "path";
 import {KAFKA_BROKERS, KAFKA_EVENT_VISITOR} from "../tokens";
 import {TestModule} from "./test-module";
-import {PaymentResponseHandler} from "../handlers/PaymentResponseHandler";
-import {PaymentRequestHandler} from "../handlers/PaymentRequestHandler";
+import {PaymentRequestListener} from "../handlers/PaymentRequestListener";
 
 jest.setTimeout(30000)
 describe(KafkaModule, () => {
@@ -99,7 +98,7 @@ describe(KafkaModule, () => {
         KafkaModule.forConsumerAsync(
           {
             schemaPath: path.join(__dirname, './avro/payment_request.avsc'),
-            handler: PaymentRequestHandler,
+            listener: PaymentRequestListener,
             config: {
               useFactory: (config: ConfigService) => {
                 return {
@@ -171,6 +170,7 @@ describe(KafkaModule, () => {
 
     await new Promise(r => setTimeout(r, 10000))
   });
+
 
   // it('should correctly process restaurant approval event', async function () {
   //

@@ -95,7 +95,7 @@ export class KafkaModule {
         },
         {
           provide: KAFKA_HANDLER,
-          useClass: options.handler
+          useClass: options.listener
         },
         {
           provide: KAFKA_CONFIG,

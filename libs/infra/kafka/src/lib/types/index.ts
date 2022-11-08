@@ -21,7 +21,7 @@ export type KafkaBaseOptions<T extends KafkaProducerConfig | KafkaConsumerConfig
 
 export type KafkaProducerOptions = KafkaBaseOptions<KafkaProducerConfig>
 export type KafkaConsumerOptions = KafkaBaseOptions<KafkaConsumerConfig> & {
-  handler: { new() }
+  listener: { new() }
 }
 
 export interface IKafkaHandler   {

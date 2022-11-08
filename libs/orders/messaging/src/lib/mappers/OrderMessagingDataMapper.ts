@@ -1,7 +1,13 @@
 import {OrderCancelledEvent, OrderCreatedEvent, OrderPaidEvent, Product} from "@ordering/orders/domain";
-import {PaymentRequestAvroModel, RestaurantApprovalRequestAvroModel} from "@ordering/infra/kafka";
+import {
+  PaymentRequestAvroModel,
+  PaymentResponseAvroModel,
+  RestaurantApprovalRequestAvroModel
+} from "@ordering/infra/kafka";
 import {randomUUID} from "crypto";
 import {OrderStatus} from "@ordering/common/domain";
+import {PaymentResponseDto} from "../../../../application/src/lib/dto/message/PaymentResponse";
+import {instanceToInstance, plainToInstance} from "class-transformer";
 
 export class OrderMessagingDataMapper {
   static orderCreatedEventToPaymentRequestAvroModel(orderCreatedEvent: OrderCreatedEvent): PaymentRequestAvroModel {
@@ -47,6 +53,10 @@ export class OrderMessagingDataMapper {
       price: order.price.amount,
       sagaId: ""
     })
+  }
+
+  static paymentResponseAvroModelToPaymentResponse(paymentResponseAvroModel: PaymentResponseAvroModel): PaymentResponseDto {
+    return plainToInstance(PaymentResponseDto, {...paymentResponseAvroModel})
   }
 
 }

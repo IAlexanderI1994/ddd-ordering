@@ -6,6 +6,7 @@ import {IOrderRepository} from "./interfaces/IOrderRepository";
 import {Optional} from "@ordering/common/types";
 import {Order} from "@ordering/orders/domain";
 import {OrderDataAccessMapper} from "../mappers/OrderDataAccessMapper";
+import {TrackingId} from "@ordering/common/domain";
 
 @Injectable()
 export class OrderRepositoryImpl implements IOrderRepository {
@@ -16,10 +17,10 @@ export class OrderRepositoryImpl implements IOrderRepository {
   }
 
 
-  async findByTrackingId(trackingId: string): Promise<Optional<Order>> {
+  async findByTrackingId(trackingId: TrackingId): Promise<Optional<Order>> {
 
     const orderEntity: Optional<OrderEntity> = await this.orderEntityRepository.findOneBy({
-      trackingId
+      trackingId: trackingId.getValue()
     })
     return orderEntity ? OrderDataAccessMapper.orderEntityToOrder(orderEntity) : null;
   }

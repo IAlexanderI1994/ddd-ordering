@@ -3,10 +3,11 @@ import {IDomainEventPublisher} from "@ordering/common/domain";
 import {OrderCreatedEvent} from "@ordering/orders/domain";
 import {KafkaProducer, PaymentRequestAvroModel} from "@ordering/infra/kafka";
 import {OrderMessagingDataMapper} from "../mappers/OrderMessagingDataMapper";
+import {IOrderCreatedPaymentRequestMessagePublisher} from "@ordering/orders/application";
 
 
 @Injectable()
-export class CreateOrderKafkaMessagePublisher implements IDomainEventPublisher<OrderCreatedEvent>{
+export class CreateOrderKafkaMessagePublisher implements IOrderCreatedPaymentRequestMessagePublisher{
 
 
   private readonly logger = new Logger(CreateOrderKafkaMessagePublisher.name)

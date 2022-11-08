@@ -1,16 +1,17 @@
 import {Injectable, Logger} from "@nestjs/common";
-import {IDomainEventPublisher} from "@ordering/common/domain";
-import { OrderCreatedEvent, OrderPaidEvent} from "@ordering/orders/domain";
+import {OrderPaidEvent} from "@ordering/orders/domain";
 import {KafkaProducer, PaymentRequestAvroModel} from "@ordering/infra/kafka";
 import {OrderMessagingDataMapper} from "../mappers/OrderMessagingDataMapper";
 import {
   RestaurantApprovalRequestAvroModel
 } from "@ordering/infra/kafka";
+import {
+  IOrderPaidRestaurantRequestMessagePublisher
+} from "@ordering/orders/application";
 
 
 @Injectable()
-export class PayOrderKafkaMessagePublisher implements IDomainEventPublisher<OrderCreatedEvent>{
-
+export class PayOrderKafkaMessagePublisher implements IOrderPaidRestaurantRequestMessagePublisher{
 
   private readonly logger = new Logger(PayOrderKafkaMessagePublisher.name)
   constructor(

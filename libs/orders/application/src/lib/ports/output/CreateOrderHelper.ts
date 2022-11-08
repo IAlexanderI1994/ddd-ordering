@@ -9,10 +9,13 @@ import {
 import {OrderDataMapper} from "../../mappers/OrderDataMapper";
 import {Optional} from "@ordering/common/types";
 import {CreateOrderCommand} from "../../dto/orders/CreateOrderCommand";
-import {OrderRepository} from "./repository/OrderRepository";
-import {CustomerRepository} from "./repository/CustomerRepository";
-import {RestaurantRepository} from "./repository/RestaurantRepository";
 import {Injectable, Logger} from "@nestjs/common";
+import {OrderRepositoryImpl} from "@ordering/infra/data-access/orders";
+import {
+  CustomerRepositoryImpl
+} from "@ordering/infra/data-access/customer";
+import {RestaurantRepositoryImpl} from "@ordering/infra/data-access/restaurant";
+
 
 @Injectable()
 export class CreateOrderHelper {
@@ -21,9 +24,9 @@ export class CreateOrderHelper {
 
   constructor(
     private readonly orderDomainService: OrderDomainService,
-    private readonly orderRepository: OrderRepository,
-    private readonly customerRepository: CustomerRepository,
-    private readonly restaurantRepository: RestaurantRepository,
+    private readonly orderRepository: OrderRepositoryImpl,
+    private readonly customerRepository: CustomerRepositoryImpl,
+    private readonly restaurantRepository: RestaurantRepositoryImpl,
   ) {
   }
 

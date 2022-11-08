@@ -1,1 +1,1 @@
-export * from './lib/infra-data-access-restaurant.module';
+export * from './lib/adapter/RestaurantRepositoryImpl';

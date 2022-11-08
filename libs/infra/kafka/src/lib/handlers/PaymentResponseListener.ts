@@ -1,4 +1,4 @@
-import {OrderStatus} from "@ordering/common/domain";
+import {OrderStatus, PaymentStatus} from "@ordering/common/domain";
 import {IKafkaHandler} from "../types";
 
 export type PaymentResponseAvroModelData = {
@@ -12,8 +12,13 @@ export type PaymentResponseAvroModelData = {
   paymentOrderStatus: OrderStatus
   failureMessages: string[];
 }
-export class PaymentResponseHandler implements IKafkaHandler{
-  handle(event: PaymentResponseAvroModelData): any {
-    console.log(event)
+export class PaymentResponseListener implements IKafkaHandler{
+  handle(data: PaymentResponseAvroModelData): any {
+
+    if ( data.paymentOrderStatus === OrderStatus.COMPLETED) {
+
+
+    }
+
   }
 }

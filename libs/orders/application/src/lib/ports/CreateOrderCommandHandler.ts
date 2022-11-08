@@ -4,17 +4,14 @@ import {CreateOrderResponseDto} from "../dto/orders/CreateOrderResponse";
 import {OrderDataMapper} from "../mappers/OrderDataMapper";
 import {CreateOrderHelper} from "./output/CreateOrderHelper";
 import {OrderCreatedEvent} from "@ordering/orders/domain";
-import {
-  OrderCreatedPaymentRequestMessagePublisher
-} from "./output/message-publisher/OrderCreatedPaymentRequestMessagePublisher";
-
+import {CreateOrderKafkaMessagePublisher} from "@ordering/orders/messaging";
 
 @CommandHandler(CreateOrderCommand)
 export class CreateOrderCommandHandler implements ICommandHandler<CreateOrderCommand> {
 
   constructor(
     private readonly createOrderHelper: CreateOrderHelper,
-    private readonly applicationDomainEventPublisher: OrderCreatedPaymentRequestMessagePublisher
+    private readonly applicationDomainEventPublisher: CreateOrderKafkaMessagePublisher
   ) {
   }
 

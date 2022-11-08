@@ -1,1 +1,1 @@
-export * from './lib/OrdersDataAccessModule';
+export * from './lib/repository/OrderRepositoryImpl';

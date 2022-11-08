@@ -11,7 +11,7 @@ export type PaymentRequestAvroModel = {
   paymentOrderStatus: OrderStatus
 
 }
-export class PaymentRequestHandler implements IKafkaHandler{
+export class PaymentRequestListener implements IKafkaHandler{
   handle(event: PaymentRequestAvroModel): any {
     console.log({event})
   }

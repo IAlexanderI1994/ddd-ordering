@@ -8,7 +8,7 @@ import {CustomerEntity} from "../entity/CustomerEntity";
 import {CustomerDataAccessMapper} from "../mapper/CustomerDataAccessMapper";
 
 @Injectable()
-class CustomerRepositoryImpl implements ICustomerRepository{
+export class CustomerRepositoryImpl implements ICustomerRepository{
 
   constructor(
     @TypeORMRepository(CustomerEntity)

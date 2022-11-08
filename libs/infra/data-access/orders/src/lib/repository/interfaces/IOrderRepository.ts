@@ -1,10 +1,10 @@
 import {Optional} from "@ordering/common/types";
-import {OrderEntity} from "../../entity/OrderEntity";
 import {Order} from "@ordering/orders/domain";
+import {TrackingId} from "@ordering/common/domain";
 
 export interface IOrderRepository {
 
-  findByTrackingId(trackingId: string): Promise<Optional<Order>>
+  findByTrackingId(trackingId: TrackingId): Promise<Optional<Order>>
 
   save(order: Order): Promise<Order>
 }
