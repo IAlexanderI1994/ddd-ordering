@@ -1,4 +1,4 @@
-import {RestaurantApprovalResponseDto} from "../../../../dto/message/RestaurantApprovalResponse";
+import {RestaurantApprovalResponseDto} from "../../../../../dto/message/RestaurantApprovalResponse";
 
 export interface IRestaurantApprovalResponseMessageListener {
 

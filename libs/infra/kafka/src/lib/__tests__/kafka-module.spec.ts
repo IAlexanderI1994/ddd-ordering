@@ -20,7 +20,7 @@ import {CustomerId, Money, OrderId, OrderStatus} from "@ordering/common/domain";
 import * as path from "path";
 import {KAFKA_BROKERS, KAFKA_EVENT_VISITOR} from "../tokens";
 import {TestModule} from "./test-module";
-import {PaymentRequestListener} from "../handlers/PaymentRequestListener";
+import {PaymentRequestListener} from "../../../../../orders/messaging/src/lib/listeners/PaymentRequestListener";
 
 jest.setTimeout(30000)
 describe(KafkaModule, () => {

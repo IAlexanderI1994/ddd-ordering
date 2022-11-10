@@ -1,7 +1,7 @@
 import {Module} from "@nestjs/common"
 import {KafkaModule} from "@ordering/infra/kafka";
-import {CreateOrderKafkaMessagePublisher} from "../publisher/CreateOrderKafkaMessagePublisher";
-import {CancelOrderKafkaMessagePublisher} from "../publisher/CancelOrderKafkaMessagePublisher";
+import {CreateOrderKafkaMessagePublisher} from "../publishers/CreateOrderKafkaMessagePublisher";
+import {CancelOrderKafkaMessagePublisher} from "../publishers/CancelOrderKafkaMessagePublisher";
 import * as path from "path";
 import {ConfigService} from "@nestjs/config";
 import {PAYMENT_REQUEST_TOPIC_NAME} from "../config/constants";

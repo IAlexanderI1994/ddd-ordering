@@ -8,6 +8,10 @@ import {randomUUID} from "crypto";
 import {OrderStatus} from "@ordering/common/domain";
 import {PaymentResponseDto} from "../../../../application/src/lib/dto/message/PaymentResponse";
 import {instanceToInstance, plainToInstance} from "class-transformer";
+import {
+  RestaurantApprovalResponseAvroModel
+} from "../../../../../infra/kafka/src/lib/avro/models/RestaurantApprovalResponseAvroModel";
+import {RestaurantApprovalResponseDto} from "../../../../application/src/lib/dto/message/RestaurantApprovalResponse";
 
 export class OrderMessagingDataMapper {
   static orderCreatedEventToPaymentRequestAvroModel(orderCreatedEvent: OrderCreatedEvent): PaymentRequestAvroModel {
@@ -57,6 +61,11 @@ export class OrderMessagingDataMapper {
 
   static paymentResponseAvroModelToPaymentResponse(paymentResponseAvroModel: PaymentResponseAvroModel): PaymentResponseDto {
     return plainToInstance(PaymentResponseDto, {...paymentResponseAvroModel})
+  }
+
+  static approvalResponseAvroModelToApprovalResponse(restaurantApprovalResponseAvroModel:RestaurantApprovalResponseAvroModel): RestaurantApprovalResponseDto {
+    return;
+
   }
 
 }

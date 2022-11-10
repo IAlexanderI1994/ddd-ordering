@@ -1,5 +1,5 @@
 import {OrderStatus} from "@ordering/common/domain";
-import {IKafkaHandler} from "../types";
+import {IKafkaHandler} from "../../../../../infra/kafka/src/lib/types";
 
 export type PaymentRequestAvroModel = {
   id: string;

@@ -1,7 +1,7 @@
 import {Module} from "@nestjs/common"
 import {KafkaModule} from "@ordering/infra/kafka";
 import * as path from "path";
-import {PayOrderKafkaMessagePublisher} from "../publisher/PayOrderKafkaMessagePublisher";
+import {PayOrderKafkaMessagePublisher} from "../publishers/PayOrderKafkaMessagePublisher";
 import {ConfigService} from "@nestjs/config";
 import {
   RESTAURANT_APPROVAL_REQUEST_TOPIC_NAME,

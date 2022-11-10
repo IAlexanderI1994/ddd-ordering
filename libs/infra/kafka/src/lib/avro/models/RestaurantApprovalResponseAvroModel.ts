@@ -1,0 +1,31 @@
+import {OrderStatus} from "@ordering/common/domain";
+
+export type OrderApprovalStatus = OrderStatus.APPROVED | OrderStatus.REJECTED
+
+export type RestaurantApprovalResponseAvroModelData = {
+  id: string;
+  sagaId: string;
+  paymentId: string;
+  orderId: string;
+  createdAt: string;
+  orderApprovalStatus: OrderApprovalStatus;
+  failureMessages: string[];
+
+}
+
+export class RestaurantApprovalResponseAvroModel implements RestaurantApprovalResponseAvroModelData {
+  constructor(
+    data: RestaurantApprovalResponseAvroModelData
+  ) {
+    Object.assign(this, data)
+  }
+
+  id: string;
+  sagaId: string;
+  paymentId: string;
+  orderId: string;
+  restaurantId: string;
+  createdAt: string;
+  orderApprovalStatus: OrderApprovalStatus;
+  failureMessages: string[];
+}

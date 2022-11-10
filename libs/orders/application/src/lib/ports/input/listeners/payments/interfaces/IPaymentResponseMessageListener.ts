@@ -1,4 +1,4 @@
-import {PaymentResponseDto} from "../../../../dto/message/PaymentResponse";
+import {PaymentResponseDto} from "../../../../../dto/message/PaymentResponse";
 
 export interface IPaymentResponseMessageListener {
 
