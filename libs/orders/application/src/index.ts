@@ -1,3 +1,7 @@
+export * from "./lib/dto/message/RestaurantApprovalResponse";
+
+export * from "./lib/dto/message/PaymentResponse";
+
 export * from './lib/ports/output/repository/interfaces/IRestaurantRepository';
 export * from './lib/ports/output/repository/interfaces/ICustomerRepository';
 export * from './lib/ports/output/repository/interfaces/IOrderRepository';

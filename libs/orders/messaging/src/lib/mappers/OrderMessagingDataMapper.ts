@@ -1,17 +1,15 @@
-import {OrderCancelledEvent, OrderCreatedEvent, OrderPaidEvent, Product} from "@ordering/orders/domain";
+import {OrderStatus} from "@ordering/common/domain";
+import {OrderCancelledEvent, OrderCreatedEvent, OrderPaidEvent} from "@ordering/orders/domain";
 import {
   PaymentRequestAvroModel,
   PaymentResponseAvroModel,
-  RestaurantApprovalRequestAvroModel
-} from "@ordering/infra/kafka";
-import {randomUUID} from "crypto";
-import {OrderStatus} from "@ordering/common/domain";
-import {PaymentResponseDto} from "../../../../application/src/lib/dto/message/PaymentResponse";
-import {instanceToInstance, plainToInstance} from "class-transformer";
-import {
+  RestaurantApprovalRequestAvroModel,
   RestaurantApprovalResponseAvroModel
-} from "../../../../../infra/kafka/src/lib/avro/models/RestaurantApprovalResponseAvroModel";
-import {RestaurantApprovalResponseDto} from "../../../../application/src/lib/dto/message/RestaurantApprovalResponse";
+} from "@ordering/infra/kafka";
+import {PaymentResponseDto, RestaurantApprovalResponseDto} from "@ordering/orders/application";
+import {randomUUID} from "crypto";
+import { plainToInstance} from "class-transformer";
+
 
 export class OrderMessagingDataMapper {
   static orderCreatedEventToPaymentRequestAvroModel(orderCreatedEvent: OrderCreatedEvent): PaymentRequestAvroModel {
@@ -27,6 +25,7 @@ export class OrderMessagingDataMapper {
       sagaId: ""
     })
   }
+
   static orderCancelledEventToPaymentRequestAvroModel(orderCancelledEvent: OrderCancelledEvent): PaymentRequestAvroModel {
 
     const {order} = orderCancelledEvent
@@ -40,6 +39,7 @@ export class OrderMessagingDataMapper {
       sagaId: ""
     })
   }
+
   static orderPaidEventToRestaurantApprovalRequestAvroModel(orderPaidEvent: OrderPaidEvent): RestaurantApprovalRequestAvroModel {
 
     const {order} = orderPaidEvent
@@ -63,9 +63,8 @@ export class OrderMessagingDataMapper {
     return plainToInstance(PaymentResponseDto, {...paymentResponseAvroModel})
   }
 
-  static approvalResponseAvroModelToApprovalResponse(restaurantApprovalResponseAvroModel:RestaurantApprovalResponseAvroModel): RestaurantApprovalResponseDto {
-    return;
-
+  static approvalResponseAvroModelToApprovalResponse(restaurantApprovalResponseAvroModel: RestaurantApprovalResponseAvroModel): RestaurantApprovalResponseDto {
+    return plainToInstance(RestaurantApprovalResponseDto, {...restaurantApprovalResponseAvroModel}, { excludeExtraneousValues: true } );
   }
 
 }

@@ -1,6 +1,5 @@
-import {OrderStatus} from "@ordering/common/domain";
+import {OrderApprovalStatus} from "@ordering/common/domain";
 
-export type OrderApprovalStatus = OrderStatus.APPROVED | OrderStatus.REJECTED
 
 export type RestaurantApprovalResponseAvroModelData = {
   id: string;

@@ -1,34 +1,42 @@
 import {IsArray, IsEnum, IsNotEmpty, IsString, IsUUID} from "class-validator";
 import {OrderApprovalStatus} from "@ordering/common/domain";
+import {Expose} from "class-transformer";
 
 export class RestaurantApprovalResponseDto {
 
+  @Expose()
   @IsNotEmpty()
   @IsString()
-  private readonly id: string;
+  readonly id: string;
 
+  @Expose()
   @IsNotEmpty()
   @IsString()
-  private readonly sagaId: string;
+  readonly sagaId: string;
 
+  @Expose()
   @IsNotEmpty()
   @IsUUID()
-  private readonly orderId: string;
+  readonly orderId: string;
 
+  @Expose()
   @IsNotEmpty()
   @IsUUID()
-  private readonly restaurantId: string;
+  readonly restaurantId: string;
 
+  @Expose()
   @IsNotEmpty()
   @IsString()
-  private readonly createdAt: string;
+  readonly createdAt: string;
 
+  @Expose()
   @IsNotEmpty()
   @IsEnum(OrderApprovalStatus)
-  private readonly orderApprovalStatus: OrderApprovalStatus;
+  readonly orderApprovalStatus: OrderApprovalStatus;
 
+  @Expose()
   @IsArray()
   @IsString({each: true})
-  private readonly failureMessages: string[]
+  readonly failureMessages: string[]
 
 }
