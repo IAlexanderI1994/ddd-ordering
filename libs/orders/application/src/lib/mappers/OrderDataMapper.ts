@@ -1,6 +1,6 @@
-import {Order, OrderItem, Product, Restaurant} from "@ordering/orders/domain";
+import {Order, OrderItem, Product, Restaurant} from "@delivery/orders/domain";
 import {CreateOrderCommand} from "../dto/orders/CreateOrderCommand";
-import {CustomerId, Money, ProductId, RestaurantId, StreetAddress} from "@ordering/common/domain";
+import {CustomerId, Money, ProductId, RestaurantId, StreetAddress} from "@delivery/common/domain";
 import {OrderAddressDto} from "../dto/orders/OrderAddress";
 import {randomUUID} from "crypto";
 import {OrderItemDto} from "../dto/orders/OrderItemDto";

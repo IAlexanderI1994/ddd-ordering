@@ -1,6 +1,6 @@
-import {Order} from "@ordering/orders/domain";
-import {Optional} from "@ordering/common/types";
-import {TrackingId} from "@ordering/common/domain";
+import {Order} from "@delivery/orders/domain";
+import {Optional} from "@delivery/common/types";
+import {TrackingId} from "@delivery/common/domain";
 
 export interface IOrderRepository {
 

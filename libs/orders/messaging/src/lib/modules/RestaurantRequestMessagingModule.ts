@@ -1,5 +1,5 @@
 import {Module} from "@nestjs/common"
-import {KafkaModule} from "@ordering/infra/kafka";
+import {KafkaModule} from "@delivery/infra/kafka";
 import * as path from "path";
 import {PayOrderKafkaMessagePublisher} from "../publishers/PayOrderKafkaMessagePublisher";
 import {ConfigService} from "@nestjs/config";

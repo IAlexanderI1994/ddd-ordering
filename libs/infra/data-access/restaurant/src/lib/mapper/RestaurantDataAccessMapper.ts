@@ -1,7 +1,7 @@
-import {Product, Restaurant} from "@ordering/orders/domain";
+import {Product, Restaurant} from "@delivery/orders/domain";
 import {RestaurantEntity} from "../entity/RestaurantEntity";
 import {RestaurantDataAccessException} from "../exception/RestaurantDataAccessException";
-import {Money, ProductId, RestaurantId} from "@ordering/common/domain";
+import {Money, ProductId, RestaurantId} from "@delivery/common/domain";
 
 export class RestaurantDataAccessMapper {
 

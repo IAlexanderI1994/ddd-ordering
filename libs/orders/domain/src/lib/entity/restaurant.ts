@@ -1,7 +1,7 @@
 import {
   AggregateRoot,
   RestaurantId,
-} from "@ordering/common/domain";
+} from "@delivery/common/domain";
 import {Product} from "./product";
 
 export class Restaurant extends AggregateRoot<RestaurantId> {

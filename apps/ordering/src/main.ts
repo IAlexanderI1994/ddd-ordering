@@ -7,7 +7,7 @@ import { ValidationPipe} from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {Transport} from "@nestjs/microservices";
 import {AppModule} from "./app.module";
-import {AllExceptionsFilter} from "@ordering/common/application/exception-filters";
+import {AllExceptionsFilter} from "@delivery/common/application/exception-filters";
 
 
 async function bootstrap() {

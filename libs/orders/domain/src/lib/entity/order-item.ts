@@ -1,4 +1,4 @@
-import {BaseEntity, Money, OrderId, OrderItemId} from "@ordering/common/domain";
+import {BaseEntity, Money, OrderId, OrderItemId} from "@delivery/common/domain";
 import {Product} from "./product";
 
 export class OrderItem extends BaseEntity<OrderItemId> {

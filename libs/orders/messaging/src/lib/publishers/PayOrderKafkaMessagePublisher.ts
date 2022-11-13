@@ -1,13 +1,13 @@
 import {Injectable, Logger} from "@nestjs/common";
-import {OrderPaidEvent} from "@ordering/orders/domain";
-import {KafkaProducer, PaymentRequestAvroModel} from "@ordering/infra/kafka";
+import {OrderPaidEvent} from "@delivery/orders/domain";
+import {KafkaProducer, PaymentRequestAvroModel} from "@delivery/infra/kafka";
 import {OrderMessagingDataMapper} from "../mappers/OrderMessagingDataMapper";
 import {
   RestaurantApprovalRequestAvroModel
-} from "@ordering/infra/kafka";
+} from "@delivery/infra/kafka";
 import {
   IOrderPaidRestaurantRequestMessagePublisher
-} from "@ordering/orders/application";
+} from "@delivery/orders/application";
 
 
 @Injectable()

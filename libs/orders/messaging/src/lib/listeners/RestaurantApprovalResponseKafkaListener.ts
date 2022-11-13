@@ -1,9 +1,9 @@
-import {OrderApprovalStatus, OrderStatus} from "@ordering/common/domain";
+import {OrderApprovalStatus, OrderStatus} from "@delivery/common/domain";
 import {Injectable, Logger} from "@nestjs/common";
-import {RestaurantApprovalResponseMessageListener} from "@ordering/orders/application";
+import {RestaurantApprovalResponseMessageListener} from "@delivery/orders/application";
 import {OrderMessagingDataMapper} from "../mappers/OrderMessagingDataMapper";
-import {RestaurantApprovalResponseAvroModel, IKafkaHandler} from "@ordering/infra/kafka";
-import {FAILURE_MESSAGES_DELIMITER} from "@ordering/common/config";
+import {RestaurantApprovalResponseAvroModel, IKafkaHandler} from "@delivery/infra/kafka";
+import {FAILURE_MESSAGES_DELIMITER} from "@delivery/common/config";
 
 export type ProductsList = Array<{ id: string, quantity: number }>
 

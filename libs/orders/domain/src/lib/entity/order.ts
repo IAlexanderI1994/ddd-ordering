@@ -8,7 +8,7 @@ import {
   RestaurantId,
   StreetAddress,
   TrackingId
-} from "@ordering/common/domain";
+} from "@delivery/common/domain";
 import {OrderItem} from "./order-item";
 import {randomUUID} from "crypto";
 import {OrderDomainException} from "../exception/OrderDomainException";

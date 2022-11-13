@@ -3,10 +3,10 @@ import {Repository} from "typeorm";
 import {OrderEntity} from "../entity/OrderEntity";
 import {InjectRepository as TypeORMRepository} from "@nestjs/typeorm";
 import {IOrderRepository} from "./interfaces/IOrderRepository";
-import {Optional} from "@ordering/common/types";
-import {Order} from "@ordering/orders/domain";
+import {Optional} from "@delivery/common/types";
+import {Order} from "@delivery/orders/domain";
 import {OrderDataAccessMapper} from "../mappers/OrderDataAccessMapper";
-import {TrackingId} from "@ordering/common/domain";
+import {TrackingId} from "@delivery/common/domain";
 
 @Injectable()
 export class OrderRepositoryImpl implements IOrderRepository {

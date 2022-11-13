@@ -1,6 +1,6 @@
 import {CustomerEntity} from "../entity/CustomerEntity";
-import {Customer} from "@ordering/orders/domain";
-import {CustomerId} from "@ordering/common/domain";
+import {Customer} from "@delivery/orders/domain";
+import {CustomerId} from "@delivery/common/domain";
 
 export class CustomerDataAccessMapper {
 

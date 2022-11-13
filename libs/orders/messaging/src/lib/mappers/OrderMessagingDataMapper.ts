@@ -1,12 +1,12 @@
-import {OrderStatus} from "@ordering/common/domain";
-import {OrderCancelledEvent, OrderCreatedEvent, OrderPaidEvent} from "@ordering/orders/domain";
+import {OrderStatus} from "@delivery/common/domain";
+import {OrderCancelledEvent, OrderCreatedEvent, OrderPaidEvent} from "@delivery/orders/domain";
 import {
   PaymentRequestAvroModel,
   PaymentResponseAvroModel,
   RestaurantApprovalRequestAvroModel,
   RestaurantApprovalResponseAvroModel
-} from "@ordering/infra/kafka";
-import {PaymentResponseDto, RestaurantApprovalResponseDto} from "@ordering/orders/application";
+} from "@delivery/infra/kafka";
+import {PaymentResponseDto, RestaurantApprovalResponseDto} from "@delivery/orders/application";
 import {randomUUID} from "crypto";
 import { plainToInstance} from "class-transformer";
 

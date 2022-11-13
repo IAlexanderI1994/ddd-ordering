@@ -1,5 +1,5 @@
-import {Optional} from "@ordering/common/types";
-import {Restaurant} from "@ordering/orders/domain";
+import {Optional} from "@delivery/common/types";
+import {Restaurant} from "@delivery/orders/domain";
 
 export interface IRestaurantRepository {
 

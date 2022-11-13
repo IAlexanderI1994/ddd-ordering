@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "npmScope": "ordering",
+  "npmScope": "delivery",
   "affected": {
     "defaultBase": "main"
   },
@@ -32,5 +32,5 @@
       ]
     }
   },
-  "defaultProject": "ordering"
+  "defaultProject": "delivery"
 }

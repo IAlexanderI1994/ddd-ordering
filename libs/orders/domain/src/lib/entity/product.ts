@@ -1,7 +1,7 @@
 import {
   BaseEntity, Money,
   ProductId,
-} from "@ordering/common/domain";
+} from "@delivery/common/domain";
 
 export class Product extends BaseEntity<ProductId> {
 

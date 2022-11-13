@@ -1,5 +1,5 @@
-import {Optional} from "@ordering/common/types";
-import {Customer} from "@ordering/orders/domain";
+import {Optional} from "@delivery/common/types";
+import {Customer} from "@delivery/orders/domain";
 
 export interface ICustomerRepository {
 

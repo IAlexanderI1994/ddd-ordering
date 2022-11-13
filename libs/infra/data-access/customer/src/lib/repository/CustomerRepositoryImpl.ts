@@ -1,6 +1,6 @@
 import {ICustomerRepository} from "./interfaces/ICustomerRepository";
-import {Optional} from "@ordering/common/types";
-import {Customer} from "@ordering/orders/domain";
+import {Optional} from "@delivery/common/types";
+import {Customer} from "@delivery/orders/domain";
 import {Injectable} from "@nestjs/common";
 import {InjectRepository as TypeORMRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";

@@ -1,4 +1,4 @@
-import {OrderStatus} from "@ordering/common/domain";
+import {OrderStatus} from "@delivery/common/domain";
 import {IKafkaHandler} from "../../../../../infra/kafka/src/lib/types";
 
 export type PaymentRequestAvroModel = {

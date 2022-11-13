@@ -1,7 +1,7 @@
-import {OrderStatus} from "@ordering/common/domain";
+import {OrderStatus} from "@delivery/common/domain";
 import {IKafkaHandler} from "../../../../../infra/kafka/src/lib/types";
 import {Injectable} from "@nestjs/common";
-import {PaymentResponseMessageListener} from "@ordering/orders/application";
+import {PaymentResponseMessageListener} from "@delivery/orders/application";
 import {OrderMessagingDataMapper} from "../mappers/OrderMessagingDataMapper";
 
 export type PaymentResponseAvroModelData = {

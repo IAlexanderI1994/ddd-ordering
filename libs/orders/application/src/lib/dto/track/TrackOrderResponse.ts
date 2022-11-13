@@ -1,5 +1,5 @@
 import {IsArray, IsEnum, IsNotEmpty, IsString, IsUUID} from "class-validator";
-import {OrderStatus} from "@ordering/common/domain";
+import {OrderStatus} from "@delivery/common/domain";
 
 export class TrackOrderResponseDto {
   @IsUUID()

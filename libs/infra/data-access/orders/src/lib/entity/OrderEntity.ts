@@ -1,5 +1,5 @@
 import {Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, JoinColumn} from "typeorm";
-import {OrderStatus} from "@ordering/common/domain";
+import {OrderStatus} from "@delivery/common/domain";
 import {OrderAddressEntity} from "./OrderAddressEntity";
 import {OrderItemEntity} from "./OrderItemEntity";
 

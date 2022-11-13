@@ -1,10 +1,10 @@
 import {Injectable, Logger} from "@nestjs/common";
-import {OrderCancelledEvent} from "@ordering/orders/domain";
-import {KafkaProducer, PaymentRequestAvroModel} from "@ordering/infra/kafka";
+import {OrderCancelledEvent} from "@delivery/orders/domain";
+import {KafkaProducer, PaymentRequestAvroModel} from "@delivery/infra/kafka";
 import {OrderMessagingDataMapper} from "../mappers/OrderMessagingDataMapper";
 import {
   IOrderCancelledPaymentRequestMessagePublisher
-} from "@ordering/orders/application";
+} from "@delivery/orders/application";
 
 
 @Injectable()

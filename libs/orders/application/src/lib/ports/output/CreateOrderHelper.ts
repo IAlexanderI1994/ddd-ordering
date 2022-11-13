@@ -5,16 +5,16 @@ import {
   OrderDomainException,
   OrderDomainService,
   Restaurant
-} from "@ordering/orders/domain";
+} from "@delivery/orders/domain";
 import {OrderDataMapper} from "../../mappers/OrderDataMapper";
-import {Optional} from "@ordering/common/types";
+import {Optional} from "@delivery/common/types";
 import {CreateOrderCommand} from "../../dto/orders/CreateOrderCommand";
 import {Injectable, Logger} from "@nestjs/common";
-import {OrderRepositoryImpl} from "@ordering/infra/data-access/orders";
+import {OrderRepositoryImpl} from "@delivery/infra/data-access/orders";
 import {
   CustomerRepositoryImpl
-} from "@ordering/infra/data-access/customer";
-import {RestaurantRepositoryImpl} from "@ordering/infra/data-access/restaurant";
+} from "@delivery/infra/data-access/customer";
+import {RestaurantRepositoryImpl} from "@delivery/infra/data-access/restaurant";
 
 
 @Injectable()

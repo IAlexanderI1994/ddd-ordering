@@ -1,4 +1,4 @@
-import {AggregateRoot, CustomerId} from "@ordering/common/domain";
+import {AggregateRoot, CustomerId} from "@delivery/common/domain";
 
 export class Customer extends AggregateRoot<CustomerId> {
 

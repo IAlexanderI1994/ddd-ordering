@@ -1,4 +1,4 @@
-import {OrderApprovalStatus} from "@ordering/common/domain";
+import {OrderApprovalStatus} from "@delivery/common/domain";
 
 
 export type RestaurantApprovalResponseAvroModelData = {

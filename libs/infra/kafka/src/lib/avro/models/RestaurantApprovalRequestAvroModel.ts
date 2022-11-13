@@ -1,4 +1,4 @@
-import {OrderStatus} from "@ordering/common/domain";
+import {OrderStatus} from "@delivery/common/domain";
 
 export type ProductsList = Array<{ id: string, quantity: number }>
 export type RestaurantApprovalRequestAvroModelData = {

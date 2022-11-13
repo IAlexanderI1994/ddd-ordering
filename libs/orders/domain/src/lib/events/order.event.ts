@@ -1,4 +1,4 @@
-import {IDomainEvent} from "@ordering/common/domain";
+import {IDomainEvent} from "@delivery/common/domain";
 import {Order} from "../entity/order";
 
 export abstract class OrderEvent implements IDomainEvent<Order>{

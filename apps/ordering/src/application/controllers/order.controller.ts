@@ -6,7 +6,7 @@ import {
   CreateOrderCommand,
   CreateOrderResponseDto,
   TrackOrderQuery
-} from "@ordering/orders/application";
+} from "@delivery/orders/application";
 import {CREATE_ORDER_COMMAND, GET_ORDER_BY_TRACKING_ID} from "../constants/controller-patterns";
 
 @Controller()

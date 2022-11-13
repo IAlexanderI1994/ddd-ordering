@@ -1,5 +1,5 @@
 import {IsArray, IsEnum, IsNotEmpty, IsString, IsUUID} from "class-validator";
-import {OrderApprovalStatus} from "@ordering/common/domain";
+import {OrderApprovalStatus} from "@delivery/common/domain";
 import {Expose} from "class-transformer";
 
 export class RestaurantApprovalResponseDto {

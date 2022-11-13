@@ -13,10 +13,10 @@ import {
   RESTAURANT_APPROVAL_REQUEST_TOPIC_NAME,
   RESTAURANT_GROUP_ID,
   RestaurantRequestMessagingModule
-} from "@ordering/orders/messaging";
-import {Order, OrderCreatedEvent} from "@ordering/orders/domain";
+} from "@delivery/orders/messaging";
+import {Order, OrderCreatedEvent} from "@delivery/orders/domain";
 import {ConfigModule, ConfigService} from "@nestjs/config";
-import {CustomerId, Money, OrderId, OrderStatus} from "@ordering/common/domain";
+import {CustomerId, Money, OrderId, OrderStatus} from "@delivery/common/domain";
 import * as path from "path";
 import {KAFKA_BROKERS, KAFKA_EVENT_VISITOR} from "../tokens";
 import {TestModule} from "./test-module";
@@ -43,7 +43,7 @@ describe(KafkaModule, () => {
   process.env[RESTAURANT_GROUP_ID] = 'restaurant-group'
 
   beforeEach(async () => {
-    const prefix = 'http://localhost:8081/subjects/com.food.ordering.system.kafka.order.avro.model'
+    const prefix = 'http://localhost:8081/subjects/com.food.delivery.system.kafka.order.avro.model'
     const revalidateSchemas = [
       `PaymentRequestAvroModel`,
       `RestaurantApprovalRequestAvroModel`,
@@ -78,7 +78,7 @@ describe(KafkaModule, () => {
             'kafka-broker-2:29092:19092',
             'kafka-broker-3:39092:19092'
           ],
-          clientId: "ordering-app",
+          clientId: "delivery-app",
           schemaRegistryHost: "http://localhost:8081/"
         }),
         // KafkaModule.forConsumerAsync(

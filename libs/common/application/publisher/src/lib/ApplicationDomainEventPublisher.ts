@@ -1,4 +1,4 @@
-import { IDomainEventPublisher } from '@ordering/common/domain';
+import { IDomainEventPublisher } from '@delivery/common/domain';
 import { Injectable } from '@nestjs/common';
 import { EventBus } from '@nestjs/cqrs';
 

@@ -1,5 +1,5 @@
 import {OrderEntity} from "../entity/OrderEntity";
-import {Order, OrderItem, Product} from "@ordering/orders/domain";
+import {Order, OrderItem, Product} from "@delivery/orders/domain";
 import {plainToClass} from "class-transformer";
 import {
   CustomerId,
@@ -10,7 +10,7 @@ import {
   RestaurantId,
   StreetAddress,
   TrackingId
-} from "@ordering/common/domain";
+} from "@delivery/common/domain";
 import {OrderAddressEntity} from "../entity/OrderAddressEntity";
 import {OrderItemEntity} from "../entity/OrderItemEntity";
 

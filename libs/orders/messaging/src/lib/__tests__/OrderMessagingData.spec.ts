@@ -1,6 +1,6 @@
 import {OrderMessagingDataMapper} from "../mappers/OrderMessagingDataMapper";
-import {PaymentResponseAvroModel, RestaurantApprovalResponseAvroModel} from "@ordering/infra/kafka";
-import {PaymentResponseDto, RestaurantApprovalResponseDto} from "@ordering/orders/application";
+import {PaymentResponseAvroModel, RestaurantApprovalResponseAvroModel} from "@delivery/infra/kafka";
+import {PaymentResponseDto, RestaurantApprovalResponseDto} from "@delivery/orders/application";
 import {plainToInstance} from "class-transformer";
 
 describe(OrderMessagingDataMapper, () => {

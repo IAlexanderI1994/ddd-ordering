@@ -1,5 +1,5 @@
 import {IsArray, IsEnum, IsNotEmpty, IsNumber, IsString, IsUUID, Min} from "class-validator";
-import {PaymentStatus} from "@ordering/common/domain";
+import {PaymentStatus} from "@delivery/common/domain";
 
 export class PaymentResponseDto {
 

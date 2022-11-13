@@ -15,7 +15,7 @@
     "infra-data-access-orders": "libs/infra/data-access/orders",
     "infra-data-access-restaurant": "libs/infra/data-access/restaurant",
     "infra-kafka": "libs/infra/kafka",
-    "ordering": "apps/ordering",
+    "delivery": "apps/delivery",
     "orders-application": "libs/orders/application",
     "orders-domain": "libs/orders/domain",
     "orders-messaging": "libs/orders/messaging",

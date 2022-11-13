@@ -3,8 +3,8 @@ import {CreateOrderCommand} from "../dto/orders/CreateOrderCommand";
 import {CreateOrderResponseDto} from "../dto/orders/CreateOrderResponse";
 import {OrderDataMapper} from "../mappers/OrderDataMapper";
 import {CreateOrderHelper} from "./output/CreateOrderHelper";
-import {OrderCreatedEvent} from "@ordering/orders/domain";
-import {CreateOrderKafkaMessagePublisher} from "@ordering/orders/messaging";
+import {OrderCreatedEvent} from "@delivery/orders/domain";
+import {CreateOrderKafkaMessagePublisher} from "@delivery/orders/messaging";
 
 @CommandHandler(CreateOrderCommand)
 export class CreateOrderCommandHandler implements ICommandHandler<CreateOrderCommand> {

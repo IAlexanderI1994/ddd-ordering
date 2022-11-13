@@ -5,7 +5,7 @@ db:
   ports:
     - "5432:5432"
   environment:
-    POSTGRES_DB: ordering
+    POSTGRES_DB: delivery
     POSTGRES_USER: root
     POSTGRES_PASSWORD: root
   volumes:

@@ -1,15 +1,15 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/ordering/src",
+  "sourceRoot": "apps/delivery/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/node:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/ordering",
-        "main": "apps/ordering/src/main.ts",
-        "tsConfig": "apps/ordering/tsconfig.app.json"
+        "outputPath": "dist/apps/delivery",
+        "main": "apps/delivery/src/main.ts",
+        "tsConfig": "apps/delivery/tsconfig.app.json"
       },
       "configurations": {
         "production": {
@@ -23,11 +23,11 @@
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "ordering:build"
+        "buildTarget": "delivery:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "ordering:build:production"
+          "buildTarget": "delivery:build:production"
         }
       }
     },
@@ -35,14 +35,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/ordering/**/*.ts"]
+        "lintFilePatterns": ["apps/delivery/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/ordering"],
+      "outputs": ["coverage/apps/delivery"],
       "options": {
-        "jestConfig": "apps/ordering/jest.config.ts",
+        "jestConfig": "apps/delivery/jest.config.ts",
         "passWithNoTests": true
       }
     }
