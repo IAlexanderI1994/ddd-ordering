@@ -1,11 +1,13 @@
 import {Controller, Logger} from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
-import {OrderApplicationService} from "../../../../../libs/orders/application/src/lib/ports/OrderApplicationService";
-import {CreateOrderCommand} from "../../../../../libs/orders/application/src/lib/dto/orders/CreateOrderCommand";
-import {CreateOrderResponseDto} from "../../../../../libs/orders/application/src/lib/dto/orders/CreateOrderResponse";
+import {MessagePattern} from '@nestjs/microservices';
+import {
+  OrderApplicationService,
+  TrackOrderResponseDto,
+  CreateOrderCommand,
+  CreateOrderResponseDto,
+  TrackOrderQuery
+} from "@ordering/orders/application";
 import {CREATE_ORDER_COMMAND, GET_ORDER_BY_TRACKING_ID} from "../constants/controller-patterns";
-import {TrackOrderResponseDto} from "../../../../../libs/orders/application/src/lib/dto/track/TrackOrderResponse";
-import {TrackOrderQuery} from "../../../../../libs/orders/application/src/lib/dto/track/TrackOrder";
 
 @Controller()
 export class OrderController {
