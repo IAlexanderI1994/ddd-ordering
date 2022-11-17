@@ -1,4 +1,4 @@
-import {Controller, Logger} from '@nestjs/common';
+import {Body, Controller, Logger, Post} from '@nestjs/common';
 import {MessagePattern} from '@nestjs/microservices';
 import {
   OrderApplicationService,
@@ -19,8 +19,11 @@ export class OrderController {
   ) {
   }
 
-  @MessagePattern(CREATE_ORDER_COMMAND)
-  public async createOrder(createOrderCommand: CreateOrderCommand): Promise<CreateOrderResponseDto> {
+  // @MessagePattern(CREATE_ORDER_COMMAND)
+  @Post('/orders')
+  public async createOrder(@Body()createOrderCommand: CreateOrderCommand): Promise<CreateOrderResponseDto> {
+
+    console.log(createOrderCommand)
 
     this.logger.log(`Creating order for customer ${createOrderCommand.customerId} and restaurant ${createOrderCommand.restaurantId}`)
     const createOrderResponse: CreateOrderResponseDto = await this.orderApplicationService.createOrder(createOrderCommand)
