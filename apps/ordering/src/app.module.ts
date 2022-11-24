@@ -12,7 +12,7 @@ import {
   RestaurantRequestMessagingModule
 } from "@delivery/orders/messaging";
 import {CreateOrderCommandHandler, OrderApplicationService} from "@delivery/orders/application";
-import {OrdersDataAccessModule} from "../../../libs/infra/data-access/orders/src/lib/OrdersDataAccessModule";
+import {OrdersDataAccessModule} from "@delivery/infra/data-access/orders";
 
 @Module({
   imports: [
