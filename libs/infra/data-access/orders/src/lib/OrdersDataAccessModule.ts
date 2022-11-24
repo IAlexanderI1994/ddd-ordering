@@ -23,6 +23,9 @@ const entities =  [OrderEntity, OrderItemEntity, OrderAddressEntity]
 
   providers: [
     OrderRepositoryImpl
+  ],
+  exports: [
+    OrderRepositoryImpl
   ]
 })
 export class OrdersDataAccessModule {

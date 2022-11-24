@@ -6,6 +6,7 @@ import * as request from 'supertest';
 import {CreateOrderCommand} from "@delivery/orders/application";
 import {randomUUID} from "crypto";
 
+jest.setTimeout(30000)
 describe('Orders application', () => {
   let app: INestApplication;
 

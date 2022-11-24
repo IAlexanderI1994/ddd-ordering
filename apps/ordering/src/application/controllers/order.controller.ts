@@ -19,11 +19,9 @@ export class OrderController {
   ) {
   }
 
-  // @MessagePattern(CREATE_ORDER_COMMAND)
   @Post('/orders')
   public async createOrder(@Body()createOrderCommand: CreateOrderCommand): Promise<CreateOrderResponseDto> {
 
-    console.log(createOrderCommand)
 
     this.logger.log(`Creating order for customer ${createOrderCommand.customerId} and restaurant ${createOrderCommand.restaurantId}`)
     const createOrderResponse: CreateOrderResponseDto = await this.orderApplicationService.createOrder(createOrderCommand)

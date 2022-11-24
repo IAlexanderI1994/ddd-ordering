@@ -11,12 +11,14 @@ import {
   PaymentRequestMessagingModule,
   RestaurantRequestMessagingModule
 } from "@delivery/orders/messaging";
-import {OrderApplicationService} from "@delivery/orders/application";
+import {CreateOrderCommandHandler, OrderApplicationService} from "@delivery/orders/application";
+import {OrdersDataAccessModule} from "../../../libs/infra/data-access/orders/src/lib/OrdersDataAccessModule";
 
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
     CqrsModule,
+    OrdersDataAccessModule,
     KafkaModule.forRootAsync({
       brokers: [
         'localhost:19092:19092',
@@ -45,7 +47,8 @@ import {OrderApplicationService} from "@delivery/orders/application";
     RestaurantRequestMessagingModule,
   ],
   providers: [
-    OrderApplicationService
+    CreateOrderCommandHandler,
+    OrderApplicationService,
   ],
   controllers: [OrderController],
   exports: [],

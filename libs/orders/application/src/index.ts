@@ -7,7 +7,6 @@ export  * from "./lib/ports/OrderApplicationService";
 
 
 export * from "./lib/dto/message/RestaurantApprovalResponse";
-
 export * from "./lib/dto/message/PaymentResponse";
 export * from './lib/ports/output/repository/interfaces/IRestaurantRepository';
 export * from './lib/ports/output/repository/interfaces/ICustomerRepository';
@@ -17,3 +16,4 @@ export * from './lib/ports/output/message-publisher/payment/IOrderCancelledPayme
 export * from './lib/ports/output/message-publisher/restaurant-approval/IOrderPaidRestaurantRequestMessagePublisher';
 export * from './lib/ports/input/listeners/payments/PaymentResponseMessageListener'
 export * from './lib/ports/input/listeners/restaurant-approval/RestaurantApprovalResponseMessageListener'
+export * from "./lib/ports/input/handlers/CreateOrderCommandHandler"
