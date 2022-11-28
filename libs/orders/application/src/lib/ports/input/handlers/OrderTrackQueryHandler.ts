@@ -1,11 +1,10 @@
 import { IQueryHandler, QueryHandler} from "@nestjs/cqrs";
-import {TrackOrderQuery} from "../dto/track/TrackOrder";
-import {TrackOrderResponseDto} from "../dto/track/TrackOrderResponse";
-import {TrackingId} from "@delivery/common/domain";
-import {Order, OrderNotFoundException} from "@delivery/orders/domain";
 import {Logger} from "@nestjs/common";
-import {OrderDataMapper} from "../mappers/OrderDataMapper";
+import {TrackOrderQuery, TrackOrderResponseDto} from "@delivery/orders/application";
+import {TrackingId} from "@delivery/common/domain";
 import {OrderRepositoryImpl} from "@delivery/infra/data-access/orders";
+import {Order, OrderNotFoundException} from "@delivery/orders/domain";
+import {OrderDataMapper} from "../../../mappers/OrderDataMapper";
 
 
 @QueryHandler(TrackOrderQuery)
