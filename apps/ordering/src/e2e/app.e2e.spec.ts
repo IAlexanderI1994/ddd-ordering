@@ -5,6 +5,7 @@ import {AppModule} from "../app.module";
 import * as request from 'supertest';
 import {CreateOrderCommand} from "@delivery/orders/application";
 import {randomUUID} from "crypto";
+import {AllExceptionsFilter} from "@delivery/common/application/exception-filters";
 
 jest.setTimeout(30000)
 describe('Orders application', () => {
@@ -21,6 +22,7 @@ describe('Orders application', () => {
     app = moduleFixture.createNestApplication();
 
     app.useLogger(new ConsoleLogger())
+    app.useGlobalFilters(new AllExceptionsFilter());
     app.useGlobalPipes(new ValidationPipe({transform: true}))
     await app.init();
   });

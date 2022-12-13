@@ -4,7 +4,7 @@ import {TrackOrderQuery, TrackOrderResponseDto} from "@delivery/orders/applicati
 import {TrackingId} from "@delivery/common/domain";
 import {OrderRepositoryImpl} from "@delivery/infra/data-access/orders";
 import {Order, OrderNotFoundException} from "@delivery/orders/domain";
-import {OrderDataMapper} from "../../../mappers/OrderDataMapper";
+import {OrderDataMapper} from "../../../../../libs/orders/application/src/lib/mappers/OrderDataMapper";
 
 
 @QueryHandler(TrackOrderQuery)

@@ -4,7 +4,7 @@ import {IRestaurantRepository} from "@delivery/orders/application";
 import {Injectable} from "@nestjs/common";
 import {RestaurantTypeORMRepository} from "../repository/RestaurantRepository";
 import {RestaurantDataAccessMapper} from "../mapper/RestaurantDataAccessMapper";
-import {RestaurantEntity} from "../entity/RestaurantEntity";
+import {RestaurantViewEntity} from "../entity/RestaurantViewEntity";
 
 @Injectable()
 export class RestaurantRepositoryImpl implements IRestaurantRepository{
@@ -16,7 +16,7 @@ export class RestaurantRepositoryImpl implements IRestaurantRepository{
 
   async findRestaurantInformation(restaurant: Restaurant): Promise<Optional<Restaurant>> {
     const restaurantProducts: string[] = RestaurantDataAccessMapper.restaurantToRestaurantProducts(restaurant)
-    const restaurantEntities: RestaurantEntity[] = await this.restaurantTypeORMRepository
+    const restaurantEntities: RestaurantViewEntity[] = await this.restaurantTypeORMRepository
       .findByRestaurantIdAndProductIdIn(
         restaurant.getId().getValue(),
         restaurantProducts

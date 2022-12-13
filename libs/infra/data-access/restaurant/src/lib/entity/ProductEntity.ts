@@ -1,9 +1,9 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity({
-  name: 'restaurants'
+  name: 'products'
 })
-export class RestaurantEntity {
+export class ProductEntity {
 
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -11,7 +11,10 @@ export class RestaurantEntity {
   @Column('varchar')
   name: string;
 
+  @Column('float')
+  price: number
+
   @Column("boolean")
-  active: boolean;
+  available: boolean;
 
 }

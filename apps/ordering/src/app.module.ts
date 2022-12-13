@@ -11,14 +11,43 @@ import {
   PaymentRequestMessagingModule,
   RestaurantRequestMessagingModule
 } from "@delivery/orders/messaging";
-import {CreateOrderCommandHandler, OrderApplicationService} from "@delivery/orders/application";
+import {
+  CreateOrderHelper,
+  OrderApplicationService,
+} from "@delivery/orders/application";
 import {OrdersDataAccessModule} from "@delivery/infra/data-access/orders";
+import {CustomersDataAccessModule} from "@delivery/infra/data-access/customer";
+import {
+  RestaurantsDataAccessModule
+} from "@delivery/infra/data-access/restaurant";
+import {TypeOrmModule, TypeOrmModuleAsyncOptions} from "@nestjs/typeorm";
+import {DB_HOST, DB_NAME, DB_PORT, DB_PWD, DB_TYPE, DB_USERNAME} from "@delivery/infra/data-access/config";
+import {CreateOrderCommandHandler} from "./application/handlers/CreateOrderCommandHandler";
+import {OrderDomainService} from "@delivery/orders/domain";
 
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
-    CqrsModule,
+
+    TypeOrmModule.forRootAsync({
+      useFactory(configSvc: ConfigService) {
+        return <TypeOrmModuleAsyncOptions>{
+          type: configSvc.getOrThrow(DB_TYPE),
+          host: configSvc.getOrThrow(DB_HOST),
+          port: +configSvc.getOrThrow(DB_PORT),
+          username: configSvc.getOrThrow(DB_USERNAME),
+          password: configSvc.getOrThrow(DB_PWD),
+          database: configSvc.getOrThrow(DB_NAME),
+          synchronize: process.env.NODE_ENV !== 'production',
+        }
+      },
+      inject: [ConfigService]
+    }),
+    RestaurantsDataAccessModule,
     OrdersDataAccessModule,
+    CustomersDataAccessModule,
+
+    CqrsModule,
     KafkaModule.forRootAsync({
       brokers: [
         'localhost:19092:19092',
@@ -28,8 +57,8 @@ import {OrdersDataAccessModule} from "@delivery/infra/data-access/orders";
       clientId: "delivery-app",
       schemaRegistryHost: "http://localhost:8081/"
     }),
-    KafkaModule.forConsumerAsync(
-      {
+
+    KafkaModule.forConsumerAsync({
         schemaPath: path.join(__dirname, '../../../libs/infra/kafka/src/lib/avro/schemas/payment_request.avsc'),
         listener: PaymentRequestListener,
         config: {
@@ -41,16 +70,19 @@ import {OrdersDataAccessModule} from "@delivery/infra/data-access/orders";
           },
           inject: [ConfigService],
         }
-      }
-    ),
+      }),
     PaymentRequestMessagingModule,
     RestaurantRequestMessagingModule,
   ],
   providers: [
+    OrderDomainService,
     CreateOrderCommandHandler,
     OrderApplicationService,
+    CreateOrderHelper
   ],
-  controllers: [OrderController],
+  controllers: [
+    OrderController
+  ],
   exports: [],
 })
 export class AppModule {

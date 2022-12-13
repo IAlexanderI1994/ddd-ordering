@@ -1,15 +1,15 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/delivery/src",
+  "sourceRoot": "apps/ordering/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/node:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/delivery",
-        "main": "apps/delivery/src/main.ts",
-        "tsConfig": "apps/delivery/tsconfig.app.json"
+        "outputPath": "dist/apps/ordering",
+        "main": "apps/ordering/src/main.ts",
+        "tsConfig": "apps/ordering/tsconfig.app.json"
       },
       "configurations": {
         "production": {
@@ -35,14 +35,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/delivery/**/*.ts"]
+        "lintFilePatterns": ["apps/ordering/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/delivery"],
+      "outputs": ["coverage/apps/ordering"],
       "options": {
-        "jestConfig": "apps/delivery/jest.config.ts",
+        "jestConfig": "apps/ordering/jest.config.ts",
         "passWithNoTests": true
       }
     }

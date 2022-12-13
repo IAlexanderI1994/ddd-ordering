@@ -8,7 +8,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "es6",
     "module": "esnext",
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
@@ -27,6 +27,9 @@
       "@delivery/common/infra": ["libs/common/infra/src/index.ts"],
       "@delivery/common/types": ["libs/common/types/src/index.ts"],
       "@delivery/infra/data-access": ["libs/infra/data-access/src/index.ts"],
+      "@delivery/infra/data-access/config": [
+        "libs/infra/data-access/config/src/index.ts"
+      ],
       "@delivery/infra/data-access/customer": [
         "libs/infra/data-access/customer/src/index.ts"
       ],

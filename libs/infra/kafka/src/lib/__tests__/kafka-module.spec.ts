@@ -81,20 +81,6 @@ describe(KafkaModule, () => {
           clientId: "delivery-app",
           schemaRegistryHost: "http://localhost:8081/"
         }),
-        // KafkaModule.forConsumerAsync(
-        //   {
-        //     schemaPath: path.join(__dirname, './avro/restaurant_approval_request.avsc'),
-        //     config: {
-        //       useFactory: (config: ConfigService) => {
-        //         return {
-        //           topic: config.getOrThrow<string>(RESTAURANT_APPROVAL_REQUEST_TOPIC_NAME),
-        //           groupId: config.getOrThrow<string>(RESTAURANT_GROUP_ID),
-        //         }
-        //       },
-        //       inject: [ConfigService],
-        //     }
-        //   }
-        // ),
         KafkaModule.forConsumerAsync(
           {
             schemaPath: path.join(__dirname, './avro/payment_request.avsc'),

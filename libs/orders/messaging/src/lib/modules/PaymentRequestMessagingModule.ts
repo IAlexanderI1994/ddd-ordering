@@ -1,4 +1,4 @@
-import {Module} from "@nestjs/common"
+import {Global, Module} from "@nestjs/common"
 import {KafkaModule} from "@delivery/infra/kafka";
 import {CreateOrderKafkaMessagePublisher} from "../publishers/CreateOrderKafkaMessagePublisher";
 import {CancelOrderKafkaMessagePublisher} from "../publishers/CancelOrderKafkaMessagePublisher";
@@ -6,6 +6,7 @@ import * as path from "path";
 import {ConfigService} from "@nestjs/config";
 import {PAYMENT_REQUEST_TOPIC_NAME} from "../config/constants";
 
+@Global()
 @Module({
   imports: [
     KafkaModule.forProducerAsync({
@@ -24,8 +25,10 @@ import {PAYMENT_REQUEST_TOPIC_NAME} from "../config/constants";
     CreateOrderKafkaMessagePublisher,
     CancelOrderKafkaMessagePublisher
   ],
-  controllers: [],
-  exports: [],
+  exports: [
+    CreateOrderKafkaMessagePublisher,
+    CancelOrderKafkaMessagePublisher
+  ],
 })
 export class PaymentRequestMessagingModule {
 }

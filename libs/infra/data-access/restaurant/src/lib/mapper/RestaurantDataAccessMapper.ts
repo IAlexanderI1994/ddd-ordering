@@ -1,7 +1,7 @@
 import {Product, Restaurant} from "@delivery/orders/domain";
-import {RestaurantEntity} from "../entity/RestaurantEntity";
 import {RestaurantDataAccessException} from "../exception/RestaurantDataAccessException";
 import {Money, ProductId, RestaurantId} from "@delivery/common/domain";
+import {RestaurantViewEntity} from "../entity/RestaurantViewEntity";
 
 export class RestaurantDataAccessMapper {
 
@@ -9,7 +9,7 @@ export class RestaurantDataAccessMapper {
     return restaurant.products.map(p => p.getId().getValue())
   }
 
-  static restaurantEntitiesToRestaurant(restaurantEntities: RestaurantEntity[]): Restaurant {
+  static restaurantEntitiesToRestaurant(restaurantEntities: RestaurantViewEntity[]): Restaurant {
 
     const [restaurantEntity] = restaurantEntities
 

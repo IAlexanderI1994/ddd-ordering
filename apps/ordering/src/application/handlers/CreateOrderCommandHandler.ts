@@ -1,10 +1,7 @@
 import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
-import {CreateOrderCommand} from "../../../dto/orders/CreateOrderCommand";
-import {CreateOrderResponseDto} from "../../../dto/orders/CreateOrderResponse";
-import {OrderDataMapper} from "../../../mappers/OrderDataMapper";
-import {CreateOrderHelper} from "../../output/CreateOrderHelper";
-import {OrderCreatedEvent} from "@delivery/orders/domain";
 import {CreateOrderKafkaMessagePublisher} from "@delivery/orders/messaging";
+import {CreateOrderCommand, OrderDataMapper, CreateOrderResponseDto, CreateOrderHelper} from "@delivery/orders/application";
+import {OrderCreatedEvent} from "@delivery/orders/domain";
 
 @CommandHandler(CreateOrderCommand)
 export class CreateOrderCommandHandler implements ICommandHandler<CreateOrderCommand> {

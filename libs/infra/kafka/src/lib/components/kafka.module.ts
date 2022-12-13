@@ -52,6 +52,7 @@ export class KafkaModule {
     const {schemaPath} = options
 
     return {
+      global: true,
       providers: [
         {
           provide: KAFKA_SCHEMA,

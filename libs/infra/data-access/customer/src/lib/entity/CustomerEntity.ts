@@ -1,13 +1,15 @@
-import {Entity, PrimaryGeneratedColumn, ViewEntity} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, ViewColumn, ViewEntity} from "typeorm";
 
 @ViewEntity({
   materialized: true,
   name: 'order_customer_m_view',
-  schema: 'customers'
+  expression: `
+        SELECT "customerId" AS "id" FROM "orders"
+    `
 })
 export class CustomerEntity {
 
-  @PrimaryGeneratedColumn("uuid")
+  @ViewColumn()
   id: string;
 
 
