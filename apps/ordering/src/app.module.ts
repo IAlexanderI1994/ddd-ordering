@@ -38,6 +38,7 @@ import {OrderDomainService} from "@delivery/orders/domain";
           username: configSvc.getOrThrow(DB_USERNAME),
           password: configSvc.getOrThrow(DB_PWD),
           database: configSvc.getOrThrow(DB_NAME),
+          autoLoadEntities: true,
           synchronize: process.env.NODE_ENV !== 'production',
         }
       },

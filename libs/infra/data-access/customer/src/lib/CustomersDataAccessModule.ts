@@ -1,9 +1,10 @@
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {Module} from "@nestjs/common"
+import {CustomerEntityView} from "./entity/CustomerEntityView";
 import {CustomerEntity} from "./entity/CustomerEntity";
-import {CustomerRepositoryImpl} from "@delivery/infra/data-access/customer";
+import {CustomerRepositoryImpl} from "./repository/CustomerRepositoryImpl";
 
-const entities =  [CustomerEntity]
+const entities =  [CustomerEntityView, CustomerEntity]
 @Module({
   imports: [
     TypeOrmModule.forFeature(entities)

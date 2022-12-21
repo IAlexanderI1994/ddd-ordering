@@ -1,6 +1,6 @@
 import {ConsoleLogger, INestApplication, ValidationPipe} from '@nestjs/common';
 import {Test, TestingModule} from '@nestjs/testing';
-import {injectEnv} from "@delivery/test-utils";
+import {injectEnv, OrderingProcessDataSeeder} from "@delivery/test-utils";
 import {AppModule} from "../app.module";
 import * as request from 'supertest';
 import {CreateOrderCommand} from "@delivery/orders/application";
@@ -11,11 +11,14 @@ jest.setTimeout(30000)
 describe('Orders application', () => {
   let app: INestApplication;
 
+  let seeder: OrderingProcessDataSeeder;
+  let data = {}
   injectEnv()
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-      providers: [],
+      providers: [
+      ],
       controllers: []
     }).compile();
 
@@ -25,6 +28,13 @@ describe('Orders application', () => {
     app.useGlobalFilters(new AllExceptionsFilter());
     app.useGlobalPipes(new ValidationPipe({transform: true}))
     await app.init();
+
+    // seeder = app.get<OrderingProcessDataSeeder>(OrderingProcessDataSeeder)
+    //
+    // const result =  await seeder.seed()
+    //
+    // console.log(result)
+    // Object.assign(data, result)
   });
 
   afterAll(async () => {

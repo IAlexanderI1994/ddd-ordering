@@ -24,11 +24,22 @@ export class OrderController {
 
 
     this.logger.log(`Creating order for customer ${createOrderCommand.customerId} and restaurant ${createOrderCommand.restaurantId}`)
-    const createOrderResponse: CreateOrderResponseDto = await this.orderApplicationService.createOrder(createOrderCommand)
 
-    this.logger.log(`Order created with tracking ID: ${createOrderResponse.orderTrackingId}`)
+    try {
+      const createOrderResponse: CreateOrderResponseDto = await this.orderApplicationService.createOrder(createOrderCommand)
+      this.logger.log(`Order created with tracking ID: ${createOrderResponse.orderTrackingId}`)
+      return createOrderResponse;
 
-    return createOrderResponse;
+    }
+    catch (e) {
+
+      this.logger.error(e.message)
+      console.error(e)
+      return null;
+    }
+
+
+
   }
 
   @MessagePattern(GET_ORDER_BY_TRACKING_ID)

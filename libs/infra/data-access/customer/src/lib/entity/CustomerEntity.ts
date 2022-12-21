@@ -1,21 +1,15 @@
-import {Entity, PrimaryGeneratedColumn, ViewColumn, ViewEntity} from "typeorm";
+import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
-@ViewEntity({
-  materialized: true,
-  name: 'order_customer_m_view',
-  expression: `
-        SELECT "customerId" AS "id" FROM "orders"
-    `
+@Entity({
+  name: 'customers'
 })
 export class CustomerEntity {
 
-  @ViewColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
-
-  equals(o: object): boolean {
-    return o instanceof CustomerEntity && o.id === this.id
-  }
+  @Column('varchar')
+  name: string;
 
 
 }
