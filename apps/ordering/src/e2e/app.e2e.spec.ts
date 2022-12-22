@@ -4,15 +4,20 @@ import {injectEnv, OrderingProcessDataSeeder} from "@delivery/test-utils";
 import {AppModule} from "../app.module";
 import * as request from 'supertest';
 import {CreateOrderCommand} from "@delivery/orders/application";
-import {randomUUID} from "crypto";
 import {AllExceptionsFilter} from "@delivery/common/application/exception-filters";
+import {getRepositoryToken} from "@nestjs/typeorm";
+import {CustomerEntity} from "@delivery/infra/data-access/customer";
+import {Repository} from "typeorm";
+import {RestaurantEntity} from "@delivery/infra/data-access/restaurant";
 
 jest.setTimeout(30000)
 describe('Orders application', () => {
   let app: INestApplication;
 
-  let seeder: OrderingProcessDataSeeder;
-  let data = {}
+  let data: {customerId: string, restaurantId: string};
+  let customerEntityRepository: Repository<CustomerEntity>;
+  let restaurantEntityRepository: Repository<RestaurantEntity>;
+
   injectEnv()
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -28,13 +33,13 @@ describe('Orders application', () => {
     app.useGlobalFilters(new AllExceptionsFilter());
     app.useGlobalPipes(new ValidationPipe({transform: true}))
     await app.init();
+    customerEntityRepository = await app.resolve(getRepositoryToken(CustomerEntity))
+    restaurantEntityRepository = await app.resolve(getRepositoryToken(RestaurantEntity))
 
-    // seeder = app.get<OrderingProcessDataSeeder>(OrderingProcessDataSeeder)
-    //
-    // const result =  await seeder.seed()
-    //
-    // console.log(result)
-    // Object.assign(data, result)
+    const seeder = new OrderingProcessDataSeeder(customerEntityRepository, restaurantEntityRepository)
+
+    data = await seeder.seed()
+
   });
 
   afterAll(async () => {
@@ -48,13 +53,14 @@ describe('Orders application', () => {
 
   it('should correctly handle create order request', async function () {
 
+    console.log(data)
     const payload: CreateOrderCommand = {
       address: {
         street: 'Hello',
         postalCode: '12342',
         city: "Moscow"
       },
-      customerId: randomUUID(),
+      customerId: data.customerId,
       orderItems: [
         {
           productId: "123",
@@ -64,7 +70,7 @@ describe('Orders application', () => {
         }
       ],
       price: 600,
-      restaurantId: randomUUID()
+      restaurantId: data.restaurantId
     }
 
     await request(app.getHttpServer())

@@ -3,6 +3,7 @@ import {Module} from "@nestjs/common"
 import {CustomerEntityView} from "./entity/CustomerEntityView";
 import {CustomerEntity} from "./entity/CustomerEntity";
 import {CustomerRepositoryImpl} from "./repository/CustomerRepositoryImpl";
+import {CustomerSubscriber} from "./db-events/CustomerSubscriber";
 
 const entities =  [CustomerEntityView, CustomerEntity]
 @Module({
@@ -11,6 +12,7 @@ const entities =  [CustomerEntityView, CustomerEntity]
   ],
 
   providers: [
+    CustomerSubscriber,
     CustomerRepositoryImpl
   ],
   exports: [

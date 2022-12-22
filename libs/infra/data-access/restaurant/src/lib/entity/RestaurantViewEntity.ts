@@ -4,13 +4,13 @@ import {ViewColumn, ViewEntity} from "typeorm";
   materialized: true,
   name: 'order_restaurant_m_view',
   expression: `
-   SELECT r.id AS restaurantId,
-    r.name AS restaurantName,
-    r.active AS restaurantActive,
-    p.id AS productId,
-    p.name AS productName,
-    p.price AS productPrice,
-    p.available AS productAvailable
+   SELECT r.id AS restaurant_id,
+    r.name AS restaurant_name,
+    r.active AS restaurant_active,
+    p.id AS product_id,
+    p.name AS product_name,
+    p.price AS product_price,
+    p.available AS product_available
    FROM restaurants r,
     products p,
     restaurant_products rp
@@ -19,22 +19,22 @@ import {ViewColumn, ViewEntity} from "typeorm";
 })
 export class RestaurantViewEntity {
 
-  @ViewColumn()
+  @ViewColumn({name: 'restaurant_id'})
   restaurantId: string
 
-  @ViewColumn()
+  @ViewColumn({name: 'product_id'})
   productId: string
 
-  @ViewColumn()
+  @ViewColumn({name: 'restaurant_name'})
   restaurantName: string;
 
-  @ViewColumn()
+  @ViewColumn({name: 'restaurant_active'})
   restaurantActive: boolean;
 
-  @ViewColumn()
+  @ViewColumn({name: 'product_name'})
   productName: string;
 
-  @ViewColumn()
+  @ViewColumn({name: 'product_price'})
   productPrice: number;
 
   equals(o: object): boolean {

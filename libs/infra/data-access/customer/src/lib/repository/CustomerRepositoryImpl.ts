@@ -12,11 +12,14 @@ export class CustomerRepositoryImpl implements ICustomerRepository{
 
   constructor(
     @TypeORMRepository(CustomerEntityView)
-    private customerEntityRepository: Repository<CustomerEntityView>
+    private readonly customerEntityViewRepository: Repository<CustomerEntityView>,
+
+
   ) {
   }
   async findCustomer(customerId: string): Promise<Optional<Customer>> {
-    const customer =  await this.customerEntityRepository.findOneBy({customerId})
+
+    const customer =  await this.customerEntityViewRepository.findOneBy({customerId})
     return customer ? CustomerDataAccessMapper.customerEntityToCustomer(customer) : null;
   }
 
