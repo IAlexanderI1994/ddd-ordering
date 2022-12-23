@@ -14,7 +14,7 @@ export class RestaurantDataAccessMapper {
     const [restaurantEntity] = restaurantEntities
 
     if ( !restaurantEntity) {
-      throw new RestaurantDataAccessException("Restaurant could not be found!")
+      throw new RestaurantDataAccessException("Restaurant with chosen products ids could not be found!")
     }
 
     const restaurantProducts = restaurantEntities.map(

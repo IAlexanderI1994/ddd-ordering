@@ -9,6 +9,8 @@ import {RestaurantProductsEntity} from "./entity/RestaurantProductsEntity";
 import {RestaurantEntity} from "./entity/RestaurantEntity";
 import {ProductEntity} from "./entity/ProductEntity";
 import {RestaurantSubscriber} from "./db-events/RestaurantSubscriber";
+import {ProductSubscriber} from "./db-events/ProductSubscriber";
+import {RestaurantProductSubscriber} from "./db-events/RestaurantProductSubscriber";
 
 const entities =  [RestaurantProductsEntity, RestaurantViewEntity, RestaurantEntity, ProductEntity]
 @Module({
@@ -17,7 +19,9 @@ const entities =  [RestaurantProductsEntity, RestaurantViewEntity, RestaurantEnt
   ],
 
   providers: [
+    RestaurantProductSubscriber,
     RestaurantSubscriber,
+    ProductSubscriber,
     RestaurantRepositoryImpl,
     RestaurantTypeORMRepository
   ],

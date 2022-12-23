@@ -5,25 +5,20 @@ import {AppModule} from "../app.module";
 import * as request from 'supertest';
 import {CreateOrderCommand} from "@delivery/orders/application";
 import {AllExceptionsFilter} from "@delivery/common/application/exception-filters";
-import {getRepositoryToken} from "@nestjs/typeorm";
-import {CustomerEntity} from "@delivery/infra/data-access/customer";
-import {Repository} from "typeorm";
-import {RestaurantEntity} from "@delivery/infra/data-access/restaurant";
+
 
 jest.setTimeout(30000)
 describe('Orders application', () => {
   let app: INestApplication;
 
-  let data: {customerId: string, restaurantId: string};
-  let customerEntityRepository: Repository<CustomerEntity>;
-  let restaurantEntityRepository: Repository<RestaurantEntity>;
+  let data: { customerId: string, restaurantId: string; productId: string };
+
 
   injectEnv()
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-      providers: [
-      ],
+      providers: [],
       controllers: []
     }).compile();
 
@@ -33,10 +28,8 @@ describe('Orders application', () => {
     app.useGlobalFilters(new AllExceptionsFilter());
     app.useGlobalPipes(new ValidationPipe({transform: true}))
     await app.init();
-    customerEntityRepository = await app.resolve(getRepositoryToken(CustomerEntity))
-    restaurantEntityRepository = await app.resolve(getRepositoryToken(RestaurantEntity))
 
-    const seeder = new OrderingProcessDataSeeder(customerEntityRepository, restaurantEntityRepository)
+    const seeder = await OrderingProcessDataSeeder.create(app)
 
     data = await seeder.seed()
 
@@ -63,7 +56,7 @@ describe('Orders application', () => {
       customerId: data.customerId,
       orderItems: [
         {
-          productId: "123",
+          productId: data.productId,
           price: 600,
           quantity: 1,
           subtotal: 600
