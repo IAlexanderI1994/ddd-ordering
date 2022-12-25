@@ -46,7 +46,6 @@ describe('Orders application', () => {
 
   it('should correctly handle create order request', async function () {
 
-    console.log(data)
     const payload: CreateOrderCommand = {
       address: {
         street: 'Hello',

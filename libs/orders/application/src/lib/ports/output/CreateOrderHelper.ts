@@ -57,11 +57,11 @@ export class CreateOrderHelper {
 
     const dbRestaurant: Optional<Restaurant> = await this.restaurantRepository.findRestaurantInformation(restaurant)
     if (!dbRestaurant) {
-      const message = `Could not find customer with id: ${restaurant.getId()}`
+      const message = `Could not find restaurant with id: ${restaurant.getId()}`
       throw new OrderDomainException(message)
     }
 
-    return restaurant;
+    return dbRestaurant;
   }
 
   private async saveOrder(order: Order): Promise<Order> {
