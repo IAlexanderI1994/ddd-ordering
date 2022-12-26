@@ -233,7 +233,7 @@ export class Order extends AggregateRoot<OrderId> {
 
 
   private validateInitialOrder() {
-    if (this.orderStatus !== null || this.getId() !== null) {
+    if (this.orderStatus || this.getId()) {
       throw new OrderDomainException("Order is not in correct state")
     }
   }

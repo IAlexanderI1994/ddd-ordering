@@ -27,6 +27,7 @@ export class CreateOrderHelper {
     private readonly orderRepository: OrderRepositoryImpl,
     private readonly customerRepository: CustomerRepositoryImpl,
     private readonly restaurantRepository: RestaurantRepositoryImpl,
+
   ) {
   }
 
@@ -35,6 +36,7 @@ export class CreateOrderHelper {
     await this.checkCustomer(command.customerId)
     const restaurant: Restaurant = await this.checkRestaurant(command)
     const order: Order = OrderDataMapper.createOrderCommandToOrder(command)
+    console.log(order)
     const orderCreatedEvent: OrderCreatedEvent = this.orderDomainService.validateAndInitiateOrder(order, restaurant)
     this.logger.log(`Order created with id: ${orderCreatedEvent.order.getId()}`)
     await this.saveOrder(order)
