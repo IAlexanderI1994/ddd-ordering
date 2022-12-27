@@ -15,6 +15,7 @@ import {
 } from "@delivery/infra/data-access/customer";
 import {RestaurantRepositoryImpl} from "@delivery/infra/data-access/restaurant";
 import { CreateOrderCommand } from "../../dto/orders/CreateOrderCommand";
+import {Transactional} from "@delivery/infra/data-access/common";
 
 
 @Injectable()
@@ -31,12 +32,13 @@ export class CreateOrderHelper {
   ) {
   }
 
-  //todo: make transactional
+  @Transactional()
   public async persistOrder(command: CreateOrderCommand): Promise<OrderCreatedEvent> {
+
     await this.checkCustomer(command.customerId)
     const restaurant: Restaurant = await this.checkRestaurant(command)
     const order: Order = OrderDataMapper.createOrderCommandToOrder(command)
-    console.log(order)
+
     const orderCreatedEvent: OrderCreatedEvent = this.orderDomainService.validateAndInitiateOrder(order, restaurant)
     this.logger.log(`Order created with id: ${orderCreatedEvent.order.getId()}`)
     await this.saveOrder(order)

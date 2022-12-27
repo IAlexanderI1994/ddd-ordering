@@ -27,6 +27,9 @@
       "@delivery/common/infra": ["libs/common/infra/src/index.ts"],
       "@delivery/common/types": ["libs/common/types/src/index.ts"],
       "@delivery/infra/data-access": ["libs/infra/data-access/src/index.ts"],
+      "@delivery/infra/data-access/common": [
+        "libs/infra/data-access/common/src/index.ts"
+      ],
       "@delivery/infra/data-access/config": [
         "libs/infra/data-access/config/src/index.ts"
       ],

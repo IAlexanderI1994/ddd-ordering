@@ -33,7 +33,6 @@ import {
 } from "@delivery/infra/data-access/config";
 import {CreateOrderCommandHandler} from "./application/handlers/CreateOrderCommandHandler";
 import {OrderDomainService} from "@delivery/orders/domain";
-import {DataSource} from "typeorm";
 
 @Module({
   imports: [
