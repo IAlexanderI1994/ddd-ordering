@@ -5,6 +5,7 @@ import {AppModule} from "../app.module";
 import * as request from 'supertest';
 import {CreateOrderCommand} from "@delivery/orders/application";
 import {AllExceptionsFilter} from "@delivery/common/application/exception-filters";
+import {getDatasource} from "@delivery/infra/data-access/config";
 
 
 jest.setTimeout(30000)
@@ -39,8 +40,10 @@ describe('Orders application', () => {
     await app.close();
   });
 
-  it('should be defined', function () {
+  it('should be defined', async function () {
     expect.assertions(1)
+
+    const ds = await getDatasource()
     expect(app).toBeDefined()
   });
 

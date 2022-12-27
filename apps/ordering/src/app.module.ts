@@ -20,27 +20,42 @@ import {CustomersDataAccessModule} from "@delivery/infra/data-access/customer";
 import {
   RestaurantsDataAccessModule
 } from "@delivery/infra/data-access/restaurant";
-import {TypeOrmModule, TypeOrmModuleAsyncOptions} from "@nestjs/typeorm";
-import {DB_HOST, DB_NAME, DB_PORT, DB_PWD, DB_TYPE, DB_USERNAME} from "@delivery/infra/data-access/config";
+import {getDataSourceToken, TypeOrmModule, TypeOrmModuleAsyncOptions} from "@nestjs/typeorm";
+import {
+  datasource,
+  DB_HOST,
+  DB_NAME,
+  DB_PORT,
+  DB_PWD,
+  DB_TYPE,
+  DB_USERNAME,
+  getDatasource
+} from "@delivery/infra/data-access/config";
 import {CreateOrderCommandHandler} from "./application/handlers/CreateOrderCommandHandler";
 import {OrderDomainService} from "@delivery/orders/domain";
+import {DataSource} from "typeorm";
 
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
-
     TypeOrmModule.forRootAsync({
       useFactory(configSvc: ConfigService) {
-        return <TypeOrmModuleAsyncOptions>{
+        const params = {
           type: configSvc.getOrThrow(DB_TYPE),
           host: configSvc.getOrThrow(DB_HOST),
           port: +configSvc.getOrThrow(DB_PORT),
           username: configSvc.getOrThrow(DB_USERNAME),
           password: configSvc.getOrThrow(DB_PWD),
           database: configSvc.getOrThrow(DB_NAME),
+        }
+        return <TypeOrmModuleAsyncOptions>{
           autoLoadEntities: true,
           synchronize: process.env.NODE_ENV !== 'production',
+         ...params,
         }
+      },
+      dataSourceFactory: async (options) => {
+        return getDatasource(options);
       },
       inject: [ConfigService]
     }),
@@ -60,18 +75,18 @@ import {OrderDomainService} from "@delivery/orders/domain";
     }),
 
     KafkaModule.forConsumerAsync({
-        schemaPath: path.join(__dirname, '../../../libs/infra/kafka/src/lib/avro/schemas/payment_request.avsc'),
-        listener: PaymentRequestListener,
-        config: {
-          useFactory: (config: ConfigService) => {
-            return {
-              topic: config.getOrThrow<string>(PAYMENT_REQUEST_TOPIC_NAME),
-              groupId: config.getOrThrow<string>(PAYMENT_GROUP_ID),
-            }
-          },
-          inject: [ConfigService],
-        }
-      }),
+      schemaPath: path.join(__dirname, '../../../libs/infra/kafka/src/lib/avro/schemas/payment_request.avsc'),
+      listener: PaymentRequestListener,
+      config: {
+        useFactory: (config: ConfigService) => {
+          return {
+            topic: config.getOrThrow<string>(PAYMENT_REQUEST_TOPIC_NAME),
+            groupId: config.getOrThrow<string>(PAYMENT_GROUP_ID),
+          }
+        },
+        inject: [ConfigService],
+      }
+    }),
     PaymentRequestMessagingModule,
     RestaurantRequestMessagingModule,
   ],
@@ -79,7 +94,7 @@ import {OrderDomainService} from "@delivery/orders/domain";
     OrderDomainService,
     CreateOrderCommandHandler,
     OrderApplicationService,
-    CreateOrderHelper
+    CreateOrderHelper,
   ],
   controllers: [
     OrderController
