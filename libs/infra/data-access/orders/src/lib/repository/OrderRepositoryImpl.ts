@@ -1,21 +1,25 @@
 import {Injectable} from "@nestjs/common";
-import {Repository} from "typeorm";
+import {EntityManager, Repository} from "typeorm";
 import {OrderEntity} from "../entity/OrderEntity";
-import {InjectRepository as TypeORMRepository} from "@nestjs/typeorm";
+import {InjectEntityManager, InjectRepository as TypeORMRepository} from "@nestjs/typeorm";
 import {IOrderRepository} from "./interfaces/IOrderRepository";
 import {Optional} from "@delivery/common/types";
 import {Order} from "@delivery/orders/domain";
 import {OrderDataAccessMapper} from "../mappers/OrderDataAccessMapper";
 import {TrackingId} from "@delivery/common/domain";
+import {TransactionsHelper} from "../../../../common/src/lib/helpers/transactions.helper";
 
 @Injectable()
 export class OrderRepositoryImpl implements IOrderRepository {
   constructor(
-    @TypeORMRepository(OrderEntity)
-    private orderEntityRepository: Repository<OrderEntity>
+    @InjectEntityManager() private readonly entityManager: EntityManager
   ) {
   }
 
+  get orderEntityRepository(): Repository<OrderEntity> {
+    const entityManager: EntityManager =  TransactionsHelper.getTransactionEntityManager() || this.entityManager
+    return entityManager.getRepository(OrderEntity)
+  }
 
   async findByTrackingId(trackingId: TrackingId): Promise<Optional<Order>> {
 

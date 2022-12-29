@@ -1,7 +1,6 @@
 import {getDatasource} from "@delivery/infra/data-access/config";
-import { AsyncLocalStorage } from 'async_hooks';
+import {TransactionsHelper} from "../helpers/transactions.helper";
 
-export const asyncStorage = new AsyncLocalStorage<any>();
 
 
 export function Transactional(): MethodDecorator {
@@ -20,7 +19,7 @@ export function Transactional(): MethodDecorator {
         const dataSource = await getDatasource()
         await dataSource.manager.transaction((entityManager) => {
 
-          return asyncStorage.run(entityManager, () => {
+          return TransactionsHelper.transactionStorage.run(entityManager, () => {
             return target.apply(thisArg, argArray)
           });
 

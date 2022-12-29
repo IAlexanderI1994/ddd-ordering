@@ -2,20 +2,23 @@ import {ICustomerRepository} from "./interfaces/ICustomerRepository";
 import {Optional} from "@delivery/common/types";
 import {Customer} from "@delivery/orders/domain";
 import {Injectable} from "@nestjs/common";
-import {InjectRepository as TypeORMRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
+import {InjectEntityManager} from "@nestjs/typeorm";
+import {EntityManager, Repository} from "typeorm";
 import {CustomerEntityView} from "../entity/CustomerEntityView";
 import {CustomerDataAccessMapper} from "../mapper/CustomerDataAccessMapper";
+import {TransactionsHelper} from "../../../../common/src/lib/helpers/transactions.helper";
 
 @Injectable()
 export class CustomerRepositoryImpl implements ICustomerRepository{
 
   constructor(
-    @TypeORMRepository(CustomerEntityView)
-    private readonly customerEntityViewRepository: Repository<CustomerEntityView>,
-
-
+    @InjectEntityManager() private readonly entityManager: EntityManager
   ) {
+  }
+
+  get customerEntityViewRepository(): Repository<CustomerEntityView> {
+    const entityManager: EntityManager =  TransactionsHelper.getTransactionEntityManager() || this.entityManager
+    return entityManager.getRepository(CustomerEntityView)
   }
   async findCustomer(customerId: string): Promise<Optional<Customer>> {
 

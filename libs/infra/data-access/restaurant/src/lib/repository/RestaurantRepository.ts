@@ -1,16 +1,21 @@
 import {IRestaurantRepository} from "./interfaces/IRestaurantRepository";
-import {InjectRepository as TypeORMRepository} from "@nestjs/typeorm";
-import {In, Repository} from "typeorm";
+import {InjectEntityManager,} from "@nestjs/typeorm";
+import {EntityManager, In, Repository} from "typeorm";
 import {Injectable} from "@nestjs/common";
-import { RestaurantViewEntity } from "../entity/RestaurantViewEntity";
+import {RestaurantViewEntity} from "../entity/RestaurantViewEntity";
+import {TransactionsHelper} from "../../../../common/src/lib/helpers/transactions.helper";
 
 @Injectable()
 export class RestaurantTypeORMRepository implements IRestaurantRepository {
 
   constructor(
-    @TypeORMRepository(RestaurantViewEntity)
-    private restaurantEntityRepository: Repository<RestaurantViewEntity>
+    @InjectEntityManager() private readonly entityManager: EntityManager
   ) {
+  }
+
+  get restaurantEntityRepository(): Repository<RestaurantViewEntity> {
+    const entityManager: EntityManager = TransactionsHelper.getTransactionEntityManager() || this.entityManager
+    return entityManager.getRepository(RestaurantViewEntity)
   }
 
   async findByRestaurantIdAndProductIdIn(restaurantId: string, productIds: string[]): Promise<RestaurantViewEntity[]> {

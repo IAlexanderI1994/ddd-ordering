@@ -20,9 +20,8 @@ import {CustomersDataAccessModule} from "@delivery/infra/data-access/customer";
 import {
   RestaurantsDataAccessModule
 } from "@delivery/infra/data-access/restaurant";
-import {getDataSourceToken, TypeOrmModule, TypeOrmModuleAsyncOptions} from "@nestjs/typeorm";
+import { TypeOrmModule, TypeOrmModuleAsyncOptions} from "@nestjs/typeorm";
 import {
-  datasource,
   DB_HOST,
   DB_NAME,
   DB_PORT,

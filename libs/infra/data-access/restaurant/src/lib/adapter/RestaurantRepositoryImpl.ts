@@ -14,6 +14,7 @@ export class RestaurantRepositoryImpl implements IRestaurantRepository{
   ) {
   }
 
+  //todo: refactor - remove nested repo
   async findRestaurantInformation(restaurant: Restaurant): Promise<Optional<Restaurant>> {
     const restaurantProducts: string[] = RestaurantDataAccessMapper.restaurantToRestaurantProducts(restaurant)
     const restaurantEntities: RestaurantViewEntity[] = await this.restaurantTypeORMRepository
