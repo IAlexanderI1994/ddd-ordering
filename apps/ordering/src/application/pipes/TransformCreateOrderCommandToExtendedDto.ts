@@ -7,10 +7,10 @@ import {
   ExtendedOrderItemDto,
   OrderItemDto
 } from "@delivery/orders/application";
-import * as assert from "node:assert";
 import * as fp from 'lodash/fp'
 import {plainToInstance} from "class-transformer";
 import {validateSync} from "class-validator";
+import * as assert from "node:assert";
 
 export type RestaurantEntityWithQuantity = RestaurantViewEntity & { quantity: number }
 
@@ -37,7 +37,7 @@ export class TransformCreateOrderCommandToExtendedDto implements PipeTransform {
     return extendedOrderItem
   }
 
-  private getExtendedOrderItems(productsEntities: RestaurantViewEntity[], orderItems: OrderItemDto[]): ExtendedOrderItemDto[] {
+  private transformToExtendedOrderItems(productsEntities: RestaurantViewEntity[], orderItems: OrderItemDto[]): ExtendedOrderItemDto[] {
 
     const result = fp.pipe(
       fp.groupBy('productId'),
@@ -63,7 +63,7 @@ export class TransformCreateOrderCommandToExtendedDto implements PipeTransform {
   }
 
   private calculateOrderPrice(orderItems: ExtendedOrderItemDto[]): number {
-    const price =  orderItems.reduce((sum, {subtotal}) => sum + subtotal, 0)
+    const price = orderItems.reduce((sum, {subtotal}) => sum + subtotal, 0)
     assert.equal(price > 0, true, `Incorrect price: Got: ${price}`)
 
     return price;
@@ -84,9 +84,16 @@ export class TransformCreateOrderCommandToExtendedDto implements PipeTransform {
     return extendedCreateOrderCommandDto;
   }
 
+  private validatePayload(dto: CreateOrderCommandDto) {
+    const instance = plainToInstance(CreateOrderCommandDto, dto)
+    const errors = validateSync(instance)
+    assert.equal(errors.length, 0, `Incorrect body payload: ${JSON.stringify(errors)}`)
+  }
+
   async transform(dto: CreateOrderCommandDto, {metatype}: ArgumentMetadata): Promise<ExtendedCreateOrderCommandDto> {
+    this.validatePayload(dto)
     const productsEntities = await this.getProductEntitiesFromDTO(dto)
-    const orderItems = this.getExtendedOrderItems(productsEntities, dto.orderItems)
+    const orderItems = this.transformToExtendedOrderItems(productsEntities, dto.orderItems)
 
     return this.combineExtendedCreateOrderCommandDTO(dto, orderItems)
   }

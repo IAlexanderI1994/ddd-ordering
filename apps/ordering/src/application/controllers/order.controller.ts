@@ -7,7 +7,8 @@ import {
   CreateOrderResponseDto,
   TrackOrderQuery
 } from "@delivery/orders/application";
-import { GET_ORDER_BY_TRACKING_ID} from "../constants/controller-patterns";
+import {GET_ORDER_BY_TRACKING_ID} from "../constants/controller-patterns";
+import {TransformCreateOrderCommandToExtendedDto} from "../pipes/TransformCreateOrderCommandToExtendedDto";
 
 @Controller()
 export class OrderController {
@@ -20,8 +21,9 @@ export class OrderController {
   }
 
   @Post('/orders')
-  public async createOrder(@Body()createOrderCommand: ExtendedCreateOrderCommandDto): Promise<CreateOrderResponseDto> {
-
+  public async createOrder(
+    @Body(TransformCreateOrderCommandToExtendedDto) createOrderCommand: ExtendedCreateOrderCommandDto
+  ): Promise<CreateOrderResponseDto> {
 
     this.logger.log(`Creating order for customer ${createOrderCommand.customerId} and restaurant ${createOrderCommand.restaurantId}`)
 
@@ -30,14 +32,12 @@ export class OrderController {
       this.logger.log(`Order created with tracking ID: ${createOrderResponse.orderTrackingId}`)
       return createOrderResponse;
 
-    }
-    catch (e) {
+    } catch (e) {
 
       this.logger.error(e.message)
       console.error(e)
       return null;
     }
-
 
 
   }
