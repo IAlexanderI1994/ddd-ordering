@@ -1,16 +1,16 @@
 import {Order, OrderItem, Product, Restaurant} from "@delivery/orders/domain";
-import {CreateOrderCommand} from "../dto/orders/CreateOrderCommand";
 import {CustomerId, Money, ProductId, RestaurantId, StreetAddress} from "@delivery/common/domain";
 import {OrderAddressDto} from "../dto/orders/OrderAddress";
 import {randomUUID} from "crypto";
-import {OrderItemDto} from "../dto/orders/OrderItemDto";
+import {ExtendedOrderItemDto, OrderItemDto} from "../dto/orders/OrderItemDto";
 import {CreateOrderResponseDto} from "../dto/orders/CreateOrderResponse";
 import {plainToClass} from "class-transformer";
 import {TrackOrderResponseDto} from "../dto/track/TrackOrderResponse";
+import {ExtendedCreateOrderCommandDto} from "../dto/orders/OrderCommandDto";
 
 export class OrderDataMapper {
 
-  static createOrderCommandToRestaurant(createOrderDto: CreateOrderCommand): Restaurant {
+  static createOrderCommandToRestaurant(createOrderDto: ExtendedCreateOrderCommandDto): Restaurant {
 
     return Restaurant.builder()
       .setRestaurantId(new RestaurantId(createOrderDto.restaurantId))
@@ -32,7 +32,7 @@ export class OrderDataMapper {
 
   }
 
-  static createOrderCommandToOrder(createOrderDto: CreateOrderCommand): Order {
+  static createOrderCommandToOrder(createOrderDto: ExtendedCreateOrderCommandDto): Order {
 
     return Order
       .builder()
@@ -62,7 +62,7 @@ export class OrderDataMapper {
     );
   }
 
-  private static orderItemsToOrderItemsEntities(orderItems: OrderItemDto[]): OrderItem[] {
+  private static orderItemsToOrderItemsEntities(orderItems: ExtendedOrderItemDto[]): OrderItem[] {
     return orderItems.map(
       oi => OrderItem
         .builder()

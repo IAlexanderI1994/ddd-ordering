@@ -1,10 +1,10 @@
 import {CommandHandler, ICommandHandler} from "@nestjs/cqrs";
 import {CreateOrderKafkaMessagePublisher} from "@delivery/orders/messaging";
-import {CreateOrderCommand, OrderDataMapper, CreateOrderResponseDto, CreateOrderHelper} from "@delivery/orders/application";
+import {ExtendedCreateOrderCommandDto, OrderDataMapper, CreateOrderResponseDto, CreateOrderHelper} from "@delivery/orders/application";
 import {OrderCreatedEvent} from "@delivery/orders/domain";
 
-@CommandHandler(CreateOrderCommand)
-export class CreateOrderCommandHandler implements ICommandHandler<CreateOrderCommand> {
+@CommandHandler(ExtendedCreateOrderCommandDto)
+export class CreateOrderCommandHandler implements ICommandHandler<ExtendedCreateOrderCommandDto> {
 
   constructor(
     private readonly createOrderHelper: CreateOrderHelper,
@@ -12,7 +12,7 @@ export class CreateOrderCommandHandler implements ICommandHandler<CreateOrderCom
   ) {
   }
 
-  public async execute(command: CreateOrderCommand): Promise<CreateOrderResponseDto> {
+  public async execute(command: ExtendedCreateOrderCommandDto): Promise<CreateOrderResponseDto> {
 
     const orderCreatedEvent: OrderCreatedEvent = await this.createOrderHelper.persistOrder(command)
 

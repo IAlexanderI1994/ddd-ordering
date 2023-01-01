@@ -3,7 +3,7 @@ import {Test, TestingModule} from '@nestjs/testing';
 import {injectEnv, OrderingProcessDataSeeder} from "@delivery/test-utils";
 import {AppModule} from "../app.module";
 import * as request from 'supertest';
-import {CreateOrderCommand} from "@delivery/orders/application";
+import {CreateOrderCommandDto} from "@delivery/orders/application";
 import {AllExceptionsFilter} from "@delivery/common/application/exception-filters";
 
 
@@ -46,7 +46,7 @@ describe('Orders application', () => {
 
   it('should correctly handle create order request', async function () {
 
-    const payload: CreateOrderCommand = {
+    const payload: CreateOrderCommandDto = {
       address: {
         street: 'Hello',
         postalCode: '12342',
@@ -56,12 +56,9 @@ describe('Orders application', () => {
       orderItems: [
         {
           productId: data.productId,
-          price: 600,
           quantity: 1,
-          subtotal: 600
         }
       ],
-      price: 600,
       restaurantId: data.restaurantId
     }
 

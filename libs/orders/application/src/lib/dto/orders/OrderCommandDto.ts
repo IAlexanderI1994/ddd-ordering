@@ -1,8 +1,7 @@
 import {IsNotEmpty, IsNumber, IsUUID, Min, ValidateNested} from "class-validator";
-import {OrderItemDto} from "./OrderItemDto";
+import {ExtendedOrderItemDto, OrderItemDto} from "./OrderItemDto";
 import {OrderAddressDto} from "./OrderAddress";
-
-export class CreateOrderCommand {
+export class CreateOrderCommandDto {
 
   @IsUUID()
   @IsNotEmpty()
@@ -12,10 +11,6 @@ export class CreateOrderCommand {
   @IsNotEmpty()
   readonly restaurantId: string;
 
-  @IsNotEmpty()
-  @IsNumber()
-  @Min(1)
-  readonly price: number;
 
   @IsNotEmpty()
   @ValidateNested({each: true})
@@ -25,6 +20,18 @@ export class CreateOrderCommand {
   @ValidateNested()
   readonly address: OrderAddressDto
 
+}
 
+
+export class ExtendedCreateOrderCommandDto extends CreateOrderCommandDto{
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(1)
+  readonly price: number;
+
+  @IsNotEmpty()
+  @ValidateNested({each: true})
+  override readonly orderItems: ExtendedOrderItemDto[]
 }
 

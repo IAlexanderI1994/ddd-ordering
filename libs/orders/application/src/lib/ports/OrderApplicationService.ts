@@ -1,10 +1,10 @@
-import {CreateOrderCommand} from "../dto/orders/CreateOrderCommand";
 import {CreateOrderResponseDto} from "../dto/orders/CreateOrderResponse";
 import {TrackOrderQuery} from "../dto/track/TrackOrder";
 import {TrackOrderResponseDto} from "../dto/track/TrackOrderResponse";
 import {IOrderApplicationService} from "./input/services/IOrderApplicationService";
 import {Injectable} from "@nestjs/common";
 import {CommandBus, QueryBus} from "@nestjs/cqrs";
+import {ExtendedCreateOrderCommandDto} from "../dto/orders/OrderCommandDto";
 
 @Injectable()
 export class OrderApplicationService implements IOrderApplicationService {
@@ -15,7 +15,7 @@ export class OrderApplicationService implements IOrderApplicationService {
   ) {
   }
 
-  async createOrder(createOrderCommand: CreateOrderCommand): Promise<CreateOrderResponseDto> {
+  async createOrder(createOrderCommand: ExtendedCreateOrderCommandDto): Promise<CreateOrderResponseDto> {
     return await this.commandBus.execute(createOrderCommand)
   }
 

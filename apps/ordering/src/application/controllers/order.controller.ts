@@ -3,11 +3,11 @@ import {MessagePattern} from '@nestjs/microservices';
 import {
   OrderApplicationService,
   TrackOrderResponseDto,
-  CreateOrderCommand,
+  ExtendedCreateOrderCommandDto,
   CreateOrderResponseDto,
   TrackOrderQuery
 } from "@delivery/orders/application";
-import {CREATE_ORDER_COMMAND, GET_ORDER_BY_TRACKING_ID} from "../constants/controller-patterns";
+import { GET_ORDER_BY_TRACKING_ID} from "../constants/controller-patterns";
 
 @Controller()
 export class OrderController {
@@ -20,7 +20,7 @@ export class OrderController {
   }
 
   @Post('/orders')
-  public async createOrder(@Body()createOrderCommand: CreateOrderCommand): Promise<CreateOrderResponseDto> {
+  public async createOrder(@Body()createOrderCommand: ExtendedCreateOrderCommandDto): Promise<CreateOrderResponseDto> {
 
 
     this.logger.log(`Creating order for customer ${createOrderCommand.customerId} and restaurant ${createOrderCommand.restaurantId}`)

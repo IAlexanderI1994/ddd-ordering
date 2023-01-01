@@ -14,8 +14,8 @@ import {
   CustomerRepositoryImpl
 } from "@delivery/infra/data-access/customer";
 import {RestaurantRepositoryImpl} from "@delivery/infra/data-access/restaurant";
-import { CreateOrderCommand } from "../../dto/orders/CreateOrderCommand";
 import {Transactional} from "@delivery/infra/data-access/common";
+import {ExtendedCreateOrderCommandDto} from "../../dto/orders/OrderCommandDto";
 
 
 @Injectable()
@@ -33,7 +33,7 @@ export class CreateOrderHelper {
   }
 
   @Transactional()
-  public async persistOrder(command: CreateOrderCommand): Promise<OrderCreatedEvent> {
+  public async persistOrder(command: ExtendedCreateOrderCommandDto): Promise<OrderCreatedEvent> {
 
     await this.checkCustomer(command.customerId)
     const restaurant: Restaurant = await this.checkRestaurant(command)
@@ -55,7 +55,7 @@ export class CreateOrderHelper {
     }
   }
 
-  private async checkRestaurant(command: CreateOrderCommand): Promise<Restaurant> {
+  private async checkRestaurant(command: ExtendedCreateOrderCommandDto): Promise<Restaurant> {
 
     const restaurant: Restaurant = OrderDataMapper.createOrderCommandToRestaurant(command)
 

@@ -113,6 +113,8 @@ export class OrderItem extends BaseEntity<OrderItemId> {
 
   public isPriceValid(): boolean {
 
+
+
     return this.price.isGreaterThanZero() &&
       this.price.equals(this.product.price) &&
       this.price.multiply(this.quantity).equals(this.subtotal)

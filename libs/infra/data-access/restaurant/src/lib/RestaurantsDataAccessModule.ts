@@ -24,7 +24,8 @@ const entities =  [RestaurantProductsEntity, RestaurantViewEntity, RestaurantEnt
     RestaurantTypeORMRepository
   ],
   exports: [
-    RestaurantRepositoryImpl
+    RestaurantRepositoryImpl,
+    RestaurantTypeORMRepository
   ]
 })
 export class RestaurantsDataAccessModule {

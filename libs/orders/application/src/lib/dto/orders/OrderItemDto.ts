@@ -1,5 +1,4 @@
 import { IsNotEmpty, IsNumber, IsUUID, Min} from "class-validator";
-
 export class OrderItemDto {
 
   @IsUUID()
@@ -11,6 +10,10 @@ export class OrderItemDto {
   @IsNotEmpty()
   readonly quantity: number;
 
+
+}
+export class ExtendedOrderItemDto extends OrderItemDto{
+
   @IsNumber()
   @Min(1)
   @IsNotEmpty()
@@ -21,6 +24,7 @@ export class OrderItemDto {
   @IsNotEmpty()
   readonly subtotal: number;
 
-
-
 }
+
+
+

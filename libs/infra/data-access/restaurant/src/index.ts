@@ -3,4 +3,5 @@ export {RestaurantEntity} from "./lib/entity/RestaurantEntity";
 export {RestaurantViewEntity} from "./lib/entity/RestaurantViewEntity";
 export {RestaurantProductsEntity} from "./lib/entity/RestaurantProductsEntity";
 export * from './lib/adapter/RestaurantRepositoryImpl';
+export * from './lib/repository/RestaurantRepository';
 export * from './lib/RestaurantsDataAccessModule';
