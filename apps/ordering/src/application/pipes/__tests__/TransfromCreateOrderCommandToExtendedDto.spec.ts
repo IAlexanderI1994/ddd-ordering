@@ -98,12 +98,27 @@ describe(TransformCreateOrderCommandToExtendedDto, () => {
       orderItems: [
         {
           productId: data.productId,
-          quantity: 1,
+          quantity: 2,
         }
       ],
       restaurantId: data.restaurantId
     }
-    const result = await pipe.transform(payload, { }as any)
+    const result = await pipe.transform(payload, {} as any)
+
+    expect(result).toEqual({
+      address: {street: 'Hello', postalCode: '12342', city: 'Moscow'},
+      customerId: data.customerId,
+      orderItems: [
+        {
+          productId: data.productId,
+          quantity: 2,
+          price: 500,
+          subtotal: 1000
+        }
+      ],
+      restaurantId: data.restaurantId,
+      price: 1000
+    })
 
 
   });

@@ -1,6 +1,7 @@
 export *  from "./lib/dto/track/TrackOrder";
 export *  from "./lib/dto/track/TrackOrderResponse";
 export * from "./lib/dto/orders/OrderCommandDto";
+export * from "./lib/dto/orders/OrderItemDto";
 export *  from "./lib/dto/orders/CreateOrderResponse";
 
 export  * from "./lib/ports/OrderApplicationService";

@@ -14,7 +14,7 @@ export class CreateOrderCommandDto {
 
   @IsNotEmpty()
   @ValidateNested({each: true})
-  readonly orderItems: OrderItemDto[]
+  orderItems: OrderItemDto[]
 
   @IsNotEmpty()
   @ValidateNested()
